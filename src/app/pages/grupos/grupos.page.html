@@ -1,0 +1,64 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Grupos</ion-title>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content *ngIf="!load">
+    <br><br>
+    <ion-segment (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="info">
+            <ion-label>Información</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="adopciones">
+            <ion-label>Adopciones</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="noticias">
+            <ion-label>noticias</ion-label>
+        </ion-segment-button>
+
+    </ion-segment>
+
+    <br><br>
+    <ion-list>
+        <ion-item *ngFor="let item of tweets">
+
+            <ion-card>
+                <img *ngIf="item.profile_banner_url" [src]="item.profile_banner_url" />
+                <img *ngIf="!item.profile_banner_url" [src]="item.profile_image_url_https">
+                <ion-card-header>
+
+                    <ion-card-title>{{item.name}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <small> Creado en: </small>
+                    <small> {{item.created_at}} </small>
+                    <p>
+                        {{item.description}}
+                    </p>
+
+                    <ion-button (click)="ingresa(item)" expand="full">Ingresa</ion-button>
+                </ion-card-content>
+
+            </ion-card>
+        </ion-item>
+    </ion-list>
+
+
+
+</ion-content>
+<ion-content *ngIf="load">
+    <div vertical="center" text-center *ngIf="load">
+        <h3> Cargando... </h3>
+        <ion-row>
+
+            <ion-col>
+                <i color="primary" class="fa fa-sync fa-spin fa-5x"></i>
+            </ion-col>
+        </ion-row>
+    </div>
+</ion-content>

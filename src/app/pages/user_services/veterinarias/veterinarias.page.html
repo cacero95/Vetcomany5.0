@@ -1,0 +1,75 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Veterinarias</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-searchbar animated (ionChange)="buscar($event)" placeholder="Busca tu institución..."></ion-searchbar>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-segment color="tertiary" (ionChange)="change($event)">
+            <ion-segment-button value="Todas">
+                <ion-label>Todas</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="Mias">
+                <ion-label>Mías</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+
+    <ion-list *ngIf="opcion == 'Todas'">
+
+
+
+        <ion-item *ngFor="let entidad of entidades | vet:filtrar">
+
+            <ion-card>
+                <img [src]="entidad.url" />
+                <ion-card-header>
+                    <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
+                    <ion-card-title>{{entidad.name}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <ul>
+                        <li *ngFor="let servicio of entidad.services">
+                            {{servicio}}
+                        </li>
+                    </ul>
+
+                    <ion-button (click)="registrarse(entidad)" expand="full">Registrarse</ion-button>
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+
+    </ion-list>
+    <ion-list *ngIf="opcion == 'Mias'">
+
+
+
+        <ion-item *ngFor="let entidad of mis_entidades | vet:filtrar">
+
+            <ion-card>
+                <img [src]="entidad.url" />
+                <ion-card-header>
+                    <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
+                    <ion-card-title>{{entidad.name}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <ul>
+                        <li *ngFor="let servicio of entidad.services">
+                            {{servicio}}
+                        </li>
+                    </ul>
+
+                    <ion-button (click)="ver(entidad)" expand="full">Ver</ion-button>
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+
+    </ion-list>
+
+</ion-content>

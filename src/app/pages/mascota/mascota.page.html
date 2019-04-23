@@ -1,0 +1,40 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button (click)="cerrar()" defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>mascota</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="card-background-page">
+
+    <ion-button (click)="choose_photo()" class="imagen" color="gold">
+        <img *ngIf="imagePreview == ''" style="border-radius: 20px; width: 80%;" src="assets/img/shalo_logo.png" alt="shalo_logo">
+        <img *ngIf="imagePreview != ''" style="border-radius: 20px; width: 80%;" [src]="imagePreview">
+
+        <div class="card-title">Clickeame</div>
+        <div class="card-subtitle">Sube foto de tu mascota</div>
+    </ion-button>
+    <ion-item>
+        <ion-label position="floating">
+            Nombre
+        </ion-label>
+        <ion-input #nombre type="text" placeholder="mascota"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">
+            edad
+        </ion-label>
+        <ion-input #edad type="number" placeholder="mascota"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">
+            raza
+        </ion-label>
+        <ion-input #raza type="text" placeholder="mascota"></ion-input>
+    </ion-item>
+    <br>
+
+    <ion-button expand="full" (click)="close(nombre.value, edad.value, raza.value)">confirmar</ion-button>
+</ion-content>

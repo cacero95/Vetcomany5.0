@@ -1,0 +1,76 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title *ngIf="vet">{{vet.name}}</ion-title>
+        <ion-title *ngIf="user">{{user.name}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="user">
+    <div>
+        <ion-item>
+
+            <ion-icon name="contact"></ion-icon>
+
+        </ion-item>
+    </div>
+    <br>
+    <ion-item>
+        <ion-label>
+            {{user.email}}
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            Mascotas:{{user.nMascotas}}
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            Dirección:{{user.direccion}}
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            Telefono:{{user.telefono}}
+        </ion-label>
+    </ion-item>
+</ion-content>
+
+<ion-content *ngIf="vet">
+    <div>
+        <ion-item>
+
+            <ion-icon text-left name="contact"></ion-icon>
+
+        </ion-item>
+    </div>
+    <br>
+    <ion-item>
+        <ion-label>
+            {{vet.email}}
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            Dirección:{{vet.direccion}}
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            Telefono:{{vet.telefono}}
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-icon slot="start" name="create"></ion-icon>
+        <ion-button fill="clear">Editar Perfil</ion-button>
+
+    </ion-item>
+    <ion-item (click)="close_sesion()">
+        <ion-icon slot="start" name="power"></ion-icon>
+        <ion-button href="/tabs/home" fill="clear">Cerrar sesión</ion-button>
+
+    </ion-item>
+</ion-content>

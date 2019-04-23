@@ -1,0 +1,30 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title horizontal="center">Mensajes</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="user">
+    <ion-list *ngIf="user.tasks">
+        <ion-item *ngFor="let tareas of user.tasks">
+
+            <ion-card horizontal="center">
+                <ion-card-header text-center>
+                    <ion-card-subtitle> {{tareas.startTime}} </ion-card-subtitle>
+                    <ion-card-title text-center>{{tareas.title}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <p> Para el: {{tareas.startTime}} </p>
+
+                    <p> {{tareas.description}} </p>
+
+
+                </ion-card-content>
+            </ion-card>
+
+        </ion-item>
+    </ion-list>
+</ion-content>

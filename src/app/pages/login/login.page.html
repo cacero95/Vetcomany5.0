@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Ingresar</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div>
+        <ion-item text-center>
+            <ion-icon name="contact"></ion-icon>
+        </ion-item>
+    </div>
+    <div *ngIf="!load">
+
+        <ion-item>
+            <ion-label position="floating">Correo</ion-label>
+            <ion-input type="text" [(ngModel)]="email"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+        <br>
+        <br>
+        <ion-button expand="block" (click)="login()">
+            Entrar
+        </ion-button>
+
+
+
+    </div>
+
+    <div vertical="center" text-center *ngIf="load">
+        <h3> Cargando... </h3>
+        <ion-row>
+
+            <ion-col>
+                <i color="primary" class="fa fa-sync fa-spin fa-5x"></i>
+            </ion-col>
+        </ion-row>
+    </div>
+
+</ion-content>

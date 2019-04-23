@@ -1,0 +1,136 @@
+<ion-header>
+    <ion-toolbar slot="start" color="tertiary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title text-center>VetCompany</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar *ngIf="vet">
+        <ion-tabs>
+
+            <ion-tab-bar slot="top">
+                <ion-tab-button (click)="ubicar('calendar')">
+                    <ion-icon name="calendar"></ion-icon>
+                    <ion-label>Eventos</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="ubicar('main')">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>{{vet.name}}</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="ubicar('users')">
+                    <ion-icon name="people"></ion-icon>
+                    <ion-label>Usuarios</ion-label>
+                </ion-tab-button>
+
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-toolbar>
+
+    <!--Tab bar para normal user-->
+
+    <ion-toolbar *ngIf="user">
+        <ion-tabs>
+
+            <ion-tab-bar slot="top">
+                <ion-tab-button (click)="ubicar('calendar')">
+                    <ion-icon name="calendar"></ion-icon>
+                    <ion-label>Eventos</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="ubicar('main')">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>{{user.name}}</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="ubicar('notificaciones')">
+                    <ion-icon name="people"></ion-icon>
+                    <ion-label>notificaciones</ion-label>
+                </ion-tab-button>
+
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-toolbar>
+
+
+
+</ion-header>
+<!--
+  Se muestra el contenido de tipo mascota
+-->
+<ion-content *ngIf="user">
+
+    <!--american_clinic
+        gabiotas_canarios
+    -->
+
+    <ion-card *ngFor="let pet of user.mascotas">
+        <img *ngIf="pet.url" [src]="pet.url">
+        <ion-card-content>
+            <ion-card-title>{{pet.pet_name}}</ion-card-title>
+            <h2 color="primary">Padre:<small>{{user.name}}-{{user.apellido}}
+                </small>
+            </h2>
+            <h3 color="primary">Raza:<small>{{pet.raza}}</small></h3>
+            <ion-row>
+                <ion-col text-right>
+                    <ion-button (click)="shared(pet.url)" text-right size="small" fill="clear" color="primary">
+                        <ion-icon slot="end" name="share-alt"></ion-icon>
+                        Compartir
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+
+
+</ion-content>
+
+
+
+
+
+
+<!--
+  Se muestra el contenido de tipo institute
+-->
+<ion-content *ngIf="vet">
+
+    <ion-card>
+
+        <ion-item>
+
+            <h2>{{vet.name}}</h2>
+
+        </ion-item>
+
+        <img *ngIf="vet.url" [src]="vet.url">
+
+        <ion-card-content>
+            <h2>Podemos en encontrarla en {{vet.direccion}}</h2>
+            <h3>contactar al correo {{vet.email}} </h3>
+            <h3>Servicios que ofrece </h3>
+            <ul>
+                <li *ngFor="let servicios of vet.services">
+                    {{servicios}}
+                </li>
+            </ul>
+        </ion-card-content>
+        <ion-row>
+            <ion-col text-right>
+                <ion-button (click)="contactar(vet.telefono)" text-right size="small" fill="clear" color="primary">
+                    <ion-icon slot="end" name="call"></ion-icon>
+                    {{vet.telefono}}
+                </ion-button>
+            </ion-col>
+        </ion-row>
+
+
+    </ion-card>
+    <br>
+    <ion-fab color="danger" vertical="bottom" horizontal="center" slot="fixed">
+        <ion-fab-button (click)="add()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+
+</ion-content>

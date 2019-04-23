@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-button (click)="close()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title> {{tema_busqueda}} </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!load">
+    <ion-list>
+        <ion-item *ngFor="let tweet of tweets">
+            <ion-card>
+                <img [src]="imagen" [alt]="tema_busqueda">
+                <ion-card-content>
+                    <small> {{tweet.created_at}} </small>
+                    <p> {{tweet.text}} </p>
+                    <!--
+                        tweet.entities.urls[0].display_url
+                    -->
+                    <ion-row *ngIf="tweet.entities.urls">
+                        <h3>Mira completo</h3>
+                        <ion-col text-right>
+                            <ion-button text-right size="small" fill="clear" color="tertiary" (click)="open(tweet.entities.urls[0].expanded_url)">
+                                <ion-icon name="share-alt"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+</ion-content>
+<ion-content *ngIf="load">
+    <div vertical="center" text-center *ngIf="load">
+        <h3> Cargando... </h3>
+        <ion-row>
+
+            <ion-col>
+                <i color="primary" class="fa fa-sync fa-spin fa-5x"></i>
+            </ion-col>
+        </ion-row>
+    </div>
+</ion-content>

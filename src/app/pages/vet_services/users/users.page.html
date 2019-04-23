@@ -1,0 +1,40 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title horizontal="center">Usuarios</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-searchbar (ionChange)="buscar_usuarios($event)"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item *ngFor="let usuario of vet.users | vetUsers:busqueda; let x = index;">
+            <ion-card>
+                <img *ngIf="usuario.mascotas[x].url" [src]="usuario.mascotas[x].url" [alt]="usuario.name">
+                <ion-card-header>
+                    <ion-card-title> {{usuario.mascotas[x].pet_name}} </ion-card-title>
+                    <ion-card-subtitle> {{usuario.name}} {{usuario.apellido}} </ion-card-subtitle>
+                    <small> Dirección:{{usuario.direccion}} </small>
+                </ion-card-header>
+                <ion-card-content>
+                    <p> Raza:{{usuario.mascotas[x].raza}} </p>
+                    <p> Edad:{{usuario.mascotas[x].edad}} </p>
+                    <ion-row>
+                        <ion-col text-right>
+                            <ion-button (click)="llamar(usuario.telefono)" text-right size="small" fill="clear" color="primary">
+                                {{usuario.telefono}}
+                                <ion-icon slot="end" name="call"></ion-icon>
+
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+</ion-content>

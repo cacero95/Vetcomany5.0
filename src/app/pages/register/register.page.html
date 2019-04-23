@@ -1,0 +1,98 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Registrese</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="type=='institute' && !load">
+    <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input [(ngModel)]="vet.name" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input [(ngModel)]="vet.direccion" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position="floating">Numero de contacto</ion-label>
+        <ion-input [(ngModel)]="vet.telefono" type="Number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input [(ngModel)]="vet.email" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+    <ion-item class="servicios">
+
+        <ion-list>
+            <ion-list-header>Servicios</ion-list-header>
+            <ion-item *ngFor="let item of services">
+                <ion-avatar slot="start">
+                    <img [src]="item.img" [alt]="item.nombre">
+                </ion-avatar>
+                <h2>{{item.nombre}}</h2>
+                <ion-checkbox (ionChange)=setServices(item.nombre) slot="end" color="secondary"></ion-checkbox>
+            </ion-item>
+
+        </ion-list>
+    </ion-item>
+
+    <br>
+    <ion-button (click)="ingresar()" expand="full">Ingresar</ion-button>
+</ion-content>
+<ion-content *ngIf="type=='mascota' && !load">
+
+    <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input type="text" [(ngModel)]="user.name"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-input type="text" [(ngModel)]="user.apellido"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input type="email" [(ngModel)]="user.email"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Telefono</ion-label>
+        <ion-input type="number" [(ngModel)]="user.telefono"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input type="text" [(ngModel)]="user.direccion"></ion-input>
+    </ion-item>
+    <br>
+    <ion-item>
+        <ion-label>Tienes mascotas?</ion-label>
+        <ion-checkbox (ionChange)="numero_mascotas()"></ion-checkbox>
+    </ion-item>
+    <br>
+    <ion-button (click)="agregar_user()" expand="full">Registrar</ion-button>
+
+</ion-content>
+<ion-content *ngIf="load">
+    <div vertical="center" text-center *ngIf="load">
+        <h3> Cargando... </h3>
+        <ion-row>
+
+            <ion-col>
+                <i color="primary" class="fa fa-sync fa-spin fa-5x"></i>
+            </ion-col>
+        </ion-row>
+    </div>
+</ion-content>

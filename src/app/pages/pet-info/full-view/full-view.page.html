@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-button (click)="cerrar()"> Cerrar </ion-button>
+        </ion-buttons>
+        <ion-title>{{data.titulo}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+
+    <ion-card>
+        <ion-card-header text-center>
+            <ion-card-title> {{data.titulo}} </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p> {{data.descripcion}} </p>
+            <ul *ngIf="data.tipos">
+                <li *ngFor="let item of data.tipos">
+                    <h3>
+                        {{item.titulo}}
+                    </h3>
+                    <h3 *ngIf="item.descripcion"> {{item.descripcion}} </h3>
+                    <hr>
+                    <div *ngIf="item.descripciones">
+                        <p *ngFor="let descrip of item.descripciones">
+                            {{descrip.descripcion}}
+                        </p>
+                    </div>
+                    <br>
+                </li>
+            </ul>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

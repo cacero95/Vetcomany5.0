@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons>
+            <ion-button (click)="cerrar()">cerrar</ion-button>
+        </ion-buttons>
+        <ion-title>{{entidad.name}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+        <img [src]="entidad.url" />
+        <ion-card-header>
+            <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
+            <ion-card-title>{{entidad.name}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p>Numero contacto {{entidad.telefono}} </p>
+            <p>Maneja servicios como:</p>
+            <ul>
+                <li *ngFor="let servicio of entidad.services">
+                    {{servicio}}
+                </li>
+            </ul>
+
+            <ion-row>
+                <ion-col *ngIf="is_transporte" text-right>
+                    <ion-button (click)="pedir_transporte()" text-right size="small" fill="clear" color="primary">
+                        pedir transporte
+                        <ion-icon slot="end" name="call"></ion-icon>
+
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+
+        </ion-card-content>
+    </ion-card>
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+        <ion-fab-button (click)="add_event()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>
