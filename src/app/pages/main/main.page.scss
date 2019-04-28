@@ -1,0 +1,15 @@
+.fondo {
+    --background: #20A9B2;
+    background-attachment: fixed;
+    --color: #ffffff;
+}
+
+.card-background-page {
+    --background: url('../../../assets/img/fondo_mar.jpg');
+    --color: #ffffff;
+}
+
+.texto {
+    --color: #ffffff;
+    text-shadow: 5px 5px 5px #000000;
+}

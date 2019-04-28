@@ -1,46 +1,52 @@
 <ion-header>
-    <ion-toolbar text-center color="tertiary">
+    <ion-toolbar class="fondo">
         <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
+            <ion-menu-button>
+                <ion-icon name="menu"></ion-icon>
+            </ion-menu-button>
         </ion-buttons>
-        <ion-title>Principal</ion-title>
+        <ion-title style="color: #fff; font-size: 20px;">
+            Vetcompany
+        </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="card-background-page">
 
     <ion-card>
-        <img src="assets/img/tengo_mascota.jpg" />
+
+
         <ion-card-header>
-
-            <ion-card-title>Grupos de mascotas</ion-card-title>
+            <div padding class="card-title">Consejos</div>
         </ion-card-header>
+        <br>
         <ion-card-content>
-
-            <p>
-                Conoce, e interactua con grupos de mascotas
-            </p>
-
-            <ion-button (click)="explorar('grupos')" expand="full">Ingresa</ion-button>
+            <img padding style="border-radius: 50px;" src="../../assets/img/pet.jpg" alt="">
+            <br>
+            <ion-button (click)="explorar('pet-info')" style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" size="large">
+                <ion-icon name="paw"></ion-icon>
+            </ion-button>
         </ion-card-content>
-
     </ion-card>
-
     <ion-card>
-        <img src="assets/img/pet.jpg" />
+
+
         <ion-card-header>
-
-            <ion-card-title>Información para tu mascota</ion-card-title>
+            <div padding class="card-title">Grupos</div>
         </ion-card-header>
+        <br>
         <ion-card-content>
-
-            <p>
-                Enterate de tips, e información para tu mascota
-            </p>
-
-            <ion-button (click)="explorar('pet-info')" expand="full">Ingresa</ion-button>
+            <img padding style="border-radius: 50px;" src="../../assets/img/tengo_mascota.jpg" alt="">
+            <br>
+            <ion-button (click)="explorar('grupos')" style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" size="large">
+                <ion-icon name="paw"></ion-icon>
+            </ion-button>
         </ion-card-content>
-
     </ion-card>
+
 
 </ion-content>
+<!--
+    <img src="http://editarfotosonline.net/wp-content/uploads/2013/08/La-creaci%C3%B3n-de-retratos-de-mascotas-mediante-el-arte-de-Collage.jpg" alt="">
+
+-->

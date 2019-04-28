@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar class="fondo">
+        <ion-buttons slot="start">
+            <ion-button (click)="close()">
+                <ion-icon name="arrow-round-back" slot="icon-only"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="card-background-page">
+    <ion-button (click)="choose_photo()" class="imagen" color="gold">
+        <img *ngIf="imagePreview == ''" style="border-radius: 20px; width: 80%;" src="assets/img/shalo_logo.png" alt="shalo_logo">
+        <img *ngIf="imagePreview != ''" style="border-radius: 20px; width: 80%;" [src]="imagePreview">
+
+        <div class="card-title">Clickeame</div>
+        <div class="card-subtitle">Subir foto</div>
+    </ion-button>
+
+    <ion-item style="--background:transparent; --color:#ffffff;">
+        <ion-label position="floating">Comenta</ion-label>
+        <ion-textarea #mensaje placeholder="Que piensas"></ion-textarea>
+    </ion-item>
+
+    <ion-row>
+        <ion-col text-center>
+            <ion-button (click)="comentar(mensaje.value)">
+                <ion-icon name="paw" size="large"></ion-icon>
+            </ion-button>
+
+        </ion-col>
+    </ion-row>
+</ion-content>

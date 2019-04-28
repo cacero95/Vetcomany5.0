@@ -417,7 +417,7 @@ export class DbaService {
   }
   notifications(noti:Tareas){
     
-    this.http.post(`http://localhost:3001/notificaciones`,noti)
+    this.http.post(`https://vetcompany.herokuapp.com/notificaciones`,noti)
     .subscribe(respuesta=>{
       console.log(JSON.stringify(respuesta));
     })

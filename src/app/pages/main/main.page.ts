@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DbaService } from 'src/app/services/dba.service';
 import { User, Veterinaria } from 'src/app/models/usuarios';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { SocialService } from '../../services/social.service';
+import { TwitterSharedPage } from './twitter-shared/twitter-shared.page';
+import { Postear_tweet } from '../../models/twitter_tweets';
 
 @Component({
   selector: 'app-main',
@@ -16,6 +19,7 @@ export class MainPage implements OnInit {
   vet:Veterinaria;
   url:'https://ionicacademy.com';
   facebook_url = 'https://www.facebook.com/V1-309863869440390/';
+  twitter_url = 'https://twitter.com/CompaniVet';
 
   public menu = [
     
@@ -26,7 +30,9 @@ export class MainPage implements OnInit {
   constructor(private dba:DbaService,
     private social:SocialSharing,
     private alertCtrl:AlertController,
-    private router:Router) { }
+    private router:Router,
+    private sharing:SocialService,
+    private modalCtrl:ModalController) { }
 
   ngOnInit() {
     let usuario = this.dba.getUsuario();
@@ -61,13 +67,78 @@ export class MainPage implements OnInit {
 
   }
 
+  async twitter_shared(origen,imagen:string){
+    
+    let cuerpo = {} as Postear_tweet;
+    let alert = await this.alertCtrl.create({
+      header:'Quieres',
+      subHeader: 'Agregar un mensaje?',
+      inputs:[
+        {
+          name:'mensaje',
+          type:'text',
+          placeholder:'Tu mensaje'
+        }
+      ],
+      buttons:[
+        {
+          text:'Confirmar',
+          role:'ok',
+          handler:(data)=>{
+            console.log(data);
+            
+            cuerpo = {
+              origen,
+              imagen,
+              mensaje:data.mensaje
+            }
+            
+            alert.dismiss();
+          }
+        },
+        {
+          text:'Cancelar',
+          role:'cancelar',
+          handler:()=>{
+            //this.sharing.twitter_sharing(origen,imagen).subscribe((data)=>{
+            //  console.log(JSON.stringify(data));
+            //},err=>{
+            //  console.log(JSON.stringify(err));
+            //})
+            cuerpo = {
+              origen,
+              imagen
+            }
+            alert.dismiss();
+          }
+        }
+      ]
+    })
+    alert.present();
+    alert.onDidDismiss().then(()=>{
+      this.sharing.twitter_sharing(cuerpo).subscribe(()=>{
+        this.alert_message('Exito :)', 'Al postear');
+      },err=>{
+        this.alert_message('Error :(', 'Al tuitear');
+        console.log(JSON.stringify(err));
+      })
+    })
+    
+    //console.log(imagen);
+    //this.sharing.twitter_sharing(origen,imagen,mensaje).subscribe((data)=>{
+    //  console.log(JSON.stringify(data));
+    //},err=>{
+    //  console.log(JSON.stringify(err));
+    //})
+  }
+  
   async alert_message(titulo:string , mensaje:string){
     const alert = await this.alertCtrl.create({
       header: titulo,
       subHeader: mensaje,
       buttons:[
         {
-          text: 'Ok',
+          text: 'Confirmar',
           role: 'Ok',
           cssClass: 'primary',
           handler: ()=>{
@@ -79,10 +150,7 @@ export class MainPage implements OnInit {
     });
     await alert.present();
   }
-  async twitter_shared(imagen:string){
-    console.log(imagen);
-    this.social.shareViaTwitter(null,imagen,this.url);
-  }
+  
   async whats_shared(imagen:string){
     console.log(imagen);
     this.social.shareViaWhatsApp('publicando desde ionic',imagen,this.url);
@@ -94,40 +162,32 @@ export class MainPage implements OnInit {
     })
 
   }
-  async shared(imagen:string){
-    /**
-     * Da la opcion de publicar una imagen
-     * en las redes sociales 
-     */
-    let alert = await this.alertCtrl.create({
-      header:'Donde quieres',
-      subHeader: 'publicar?',
-      buttons:[
-
-        {
-          text:'Facebook',
-          role:'Facebook',
-          cssClass:'primary',
-          handler: ()=>{
-            this.face_shared(imagen);
-          }
-        },
-        {
-          text:'Twitter',
-          role:'Twitter',
-          cssClass:'secondary',
-          handler: ()=>{
-            this.twitter_shared(imagen);
-          }
-
-        }
-        
-
-      ]
+  
+  async comenta(origen){
+    let modal = await this.modalCtrl.create({
+      component:TwitterSharedPage
     });
-    await alert.present();
+    modal.present();
+    let { data } = await modal.onDidDismiss();
+    let cuerpo:Postear_tweet = {
+      origen,
+      imagen:data.imagen,
+      mensaje:data.mensaje 
+    }
+    if(!data.result){
+      this.sharing.twitter_sharing(cuerpo)
+      .subscribe(data=>{
+        this.alert_message('Exito :)','Al publicar');
+      },err=>{
+        this.alert_message('Error :(', 'Al publicar');
+        console.log(JSON.stringify(err));
+      })
+    }
+    else {
+      // quiere decir que se cancelo share 
+      console.log(JSON.stringify(data));
+    }
   }
-
   contactar(number){
 
   }

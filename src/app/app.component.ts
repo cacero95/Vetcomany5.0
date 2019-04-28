@@ -20,7 +20,9 @@ export class AppComponent {
   public appMenu = [
     
     {title: 'Entrar', url: '/login', icon: 'md-contact'},
-    {title: 'Registrarse', url:'/register', icon:'md-arrow-round-up'}
+    {title: 'Registrarse', url:'/register', icon:'md-arrow-round-up'},
+    {title: 'Enterate', url: '/pet-info', icon: 'information-circle-outline'},
+    {title: 'Grupos', url:'/grupos', icon:'chatbubbles'}
   
   ]
   constructor(
@@ -39,26 +41,32 @@ export class AppComponent {
 
 
   async navegar(url){
-
+    console.log(url);
+    switch (url){
+      case '/login':
+        this.router.navigate(['/login']);
+        break;
+      case '/register':
+          let modal = await this.modalCtrl.create({
+            component:TypeUserPage,
+            componentProps:{
+              tipo:url
+            }
+          });
+          modal.present();
+          const data = await modal.onDidDismiss();
+          this.dba.setTipo(data.data.result);
+          this.router.navigate([`/${url}`]);
+          break;
+      case '/grupos':
+          this.router.navigate(['/grupos']);
+          break;
+      case '/pet-info':
+          this.router.navigate(['/pet-info']);
+          break;
+    }
     
-    if (url == '/login'){
-      this.router.navigate(['/login']);
-    }
-    else {
-      
-      let modal = await this.modalCtrl.create({
-        component:TypeUserPage,
-        componentProps:{
-          tipo:url
-        }
-      });
-      modal.present();
-      const data = await modal.onDidDismiss();
-      this.dba.setTipo(data.data.result);
-      this.router.navigate([`/${url}`]);
-      
-
-    }
+   
 
   }
 

@@ -1,3 +1,10 @@
+export interface Postear_tweet{
+    origen:string;
+    imagen?:string;
+    hashtag?:string;
+    mensaje?:string;
+}
+
 export interface Body {
     cuerpo: Cuerpo;
 }
