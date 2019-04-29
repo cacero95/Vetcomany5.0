@@ -1,9 +1,66 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>editar</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-button (click)="cerrar()" slot="icon-only">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title style="font-weight: 40px;">
+            Editar
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding class="card-background-page">
+    <ion-slides pager="true">
+        <ion-slide *ngFor="let mascota of user.mascotas" (click)="change_img(mascota)" (ionSlideTap)="change_img()">
+            <img *ngIf="mascota.url" style="padding: 10px; margin-bottom:40px; " [src]="mascota.url" alt="">
+            <div *ngIf="!mascota.url" class="opacity">
+                <ion-grid fixed>
+                    <ion-row size="10" offset="1">
+                        <ion-col>
+                            <ion-icon name="add"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+        </ion-slide>
+    </ion-slides>
+
+    <ion-item>
+        <ion-label position="floating">
+            Nombre
+        </ion-label>
+        <ion-input type="text" #name></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">
+            Apellido
+        </ion-label>
+        <ion-input type="text" #apellido></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">
+            Dirección
+        </ion-label>
+        <ion-input type="text" #direccion></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">
+            Telefono
+        </ion-label>
+        <ion-input type="tel" #telefono></ion-input>
+    </ion-item>
+    <br>
 
 </ion-content>
+<ion-footer>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="10" offset="1">
+                <ion-button (click)="update_user(name.value,apellido.value, direccion.value, telefono.value)" expand="full" shape="round">Listo</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>

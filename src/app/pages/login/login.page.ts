@@ -76,6 +76,7 @@ export class LoginPage implements OnInit {
           this.load = false;
         },3000)
     }).catch(err=>{
+      this.load = false;
       this.show_alert(err.code,err.message);
     })
     

@@ -11,7 +11,6 @@ const routes: Routes = [
   { path: 'pet-info', loadChildren: './pages/pet-info/pet-info.module#PetInfoPageModule' },
   { path: 'mascota', loadChildren: './pages/mascota/mascota.module#MascotaPageModule' },
   { path: 'central', loadChildren: './pages/central/central.module#CentralPageModule' },
-  { path: 'editar', loadChildren: './pages/user/editar/editar.module#EditarPageModule' },
   
 ];
 

@@ -7,7 +7,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
     <div>
         <ion-item text-center>
             <ion-icon name="contact"></ion-icon>
@@ -25,20 +25,23 @@
         </ion-item>
         <br>
         <br>
-        <ion-button expand="block" (click)="login()">
-            Entrar
+        <ion-button color="medium" expand="block" (click)="login()">
+            entrar
         </ion-button>
-
 
 
     </div>
 
     <div vertical="center" text-center *ngIf="load">
         <h3> Cargando... </h3>
-        <ion-row>
+        <ion-row vertical="center">
 
             <ion-col>
-                <i color="primary" class="fa fa-sync fa-spin fa-5x"></i>
+                <!--
+
+                    <i color="primary" class="fa fa-sync fa-spin fa-5x"></i>
+                -->
+                <a href="http://www.gifsanimados.org/cat-perros-202.htm"><img src="http://www.gifsanimados.org/data/media/202/perro-imagen-animada-0931.gif" alt="perro-imagen-animada-0931" /></a>
             </ion-col>
         </ion-row>
     </div>

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DbaService } from '../../services/dba.service';
 import { User, Veterinaria } from '../../models/usuarios';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { EditarPage } from './editar/editar.page';
 
 @Component({
   selector: 'app-user',
@@ -14,7 +15,8 @@ export class UserPage implements OnInit {
   vet:Veterinaria;
   constructor(private dba:DbaService,
     private router:Router,
-    private alertCtlr:AlertController) { }
+    private alertCtlr:AlertController,
+    private modalCtrl:ModalController) { }
 
   ngOnInit() {
     let usuario = this.dba.getUsuario();
@@ -26,9 +28,15 @@ export class UserPage implements OnInit {
     }
   }
   close_sesion(){
+
     this.dba.setUsuario(null);
     this.dba.setTipo('');
     
   }
-  
+  async editar(){
+    let modal = await this.modalCtrl.create({
+      component:EditarPage
+    });
+    modal.present();
+  }
 }
