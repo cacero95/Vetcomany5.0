@@ -35,7 +35,7 @@ export class MascotaPage implements OnInit {
       for (var i = 0; i < results.length; i++){
         this.imagePreview = 'data:image/jpeg;base64,' + results[i];
         this.image64 = results[i];
-        console.log(this.image64.length);
+        
         this.is_image = true; // quiere decir que la imagen esta en la mascota
       }
     },(err)=>console.log(JSON.stringify(err)))

@@ -1,0 +1,54 @@
+form Registro
+
+usuario_normal
+nombre
+apellido
+telefono
+usuario 
+contraseña
+logo* (icofinder)
+targeta_credito*
+is_targeta*
+correo*
+tipo
+direcciones
+
+
+transporte
+nombre
+apellido
+telefono
+direccion
+tipo
+tipo_tranporte
+usuario
+contraseña
+transportes
+calificaciones (con estrellas 1-5)
+
+
+trasportes
+imagen
+<a href="http://www.gifsanimados.org/cat-motos-y-motocicletas-73.htm"><img src="http://www.gifsanimados.org/data/media/73/moto-y-motocicleta-imagen-animada-0068.gif" border="0" alt="moto-y-motocicleta-imagen-animada-0068" /></a>
+modelo
+marca
+placa
+img_placa
+numero_tecno
+fecha_expedicion
+
+
+
+<script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBkvUKkHIJcUNvE663K1bC2ux5A9LKLy8U",
+    authDomain: "mototaxi-fd331.firebaseapp.com",
+    databaseURL: "https://mototaxi-fd331.firebaseio.com",
+    projectId: "mototaxi-fd331",
+    storageBucket: "mototaxi-fd331.appspot.com",
+    messagingSenderId: "739012384753"
+  };
+  firebase.initializeApp(config);
+</script>

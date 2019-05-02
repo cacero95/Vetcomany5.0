@@ -25,7 +25,7 @@ export class SocialService {
     }
     body.mensaje = message;
       
-    return this.http.post(`http://localhost:3001/twitter_post`,body)
+    return this.http.post(`https://vetcompany.herokuapp.com/twitter_post`,body)
 
   }
   

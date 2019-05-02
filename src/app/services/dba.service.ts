@@ -6,7 +6,8 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable,pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
-import { Notifications } from '../models/notifications';
+import { Events } from '@ionic/angular';
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class DbaService {
   token:string;
   constructor(private http:HttpClient,
     private fireDba:AngularFireDatabase,
-    private storage:Storage) { }
+    private storage:Storage,
+    private events:Events) { }
   
   login(email){
     let usuario_log = {};
@@ -364,6 +366,61 @@ export class DbaService {
     this.fireDba.object(`${this.key}`).update(this.usuario);
     
   }
+  async setNotifications(tasks:Tareas[]){
+    
+    let fecha = new Date();
+    let pos =  0;
+    for (let tarea of tasks){
+
+      let dia = new Date(tarea.startTime);
+      let yesterday = new Date(dia.getTime() - 24*60*60*1000);
+      let tomorrow = new Date(dia.getTime() + 24*60*60*1000);
+      /**
+       *  si la fecha es un dia antes del evento o el mismo dia
+       *  se manda una notificacion segun el token
+      */
+     
+      if (yesterday.getDate() == fecha.getDate() || dia.getDate() == fecha.getDate()){
+        let respuesta = await this.sendNotification(tarea);
+        if (respuesta){
+          // acaba el el codigo cuando se recive la notificacion
+        }
+      }
+      if (fecha.getDate() == tomorrow.getDate()){
+        /**
+         * eliminamos la notificación splice
+         */
+        tasks.splice(pos); // borro la notificacion que ya paso
+        this.usuario.tasks = tasks;
+        
+        if (this.usuario.type == 'mascota'){
+          this.actualizar_user(this.usuario);
+        }
+        else {
+          this.actualizar_vet(this.usuario);
+        }
+      }
+      pos = pos+1;
+    }
+    
+  }
+
+  sendNotification(tasks:Tareas){
+    let cuerpo = {
+      destino:this.token,
+      title:tasks.title,
+      mensaje:tasks.description,
+      origen:this.usuario.name
+    }
+   return new Promise ((resolve,reject)=>{
+     this.http.post(`https://vetcompany.herokuapp.com/notificaciones`,cuerpo).subscribe((data)=>{
+       resolve(true);
+     },err=>{
+       reject(false);
+     })
+   })  
+  }
+
   getVeterinarias(){
     this.actualiza = this.fireDba.list(`veterinarias/`).snapshotChanges()
     .pipe(map(valores=>{
@@ -387,26 +444,16 @@ export class DbaService {
         while(llave.indexOf(".") != -1){
           llave = llave.replace(".","_");
         }
-    this.fireDba.object(`${llave}/`).update(entidad)
-    .then(()=>{
-      console.log('se subio con exito');
-    }).catch(err=>{
-      // se muestra si ocasiono algun problema
-      // la subida de datos
-      console.log(JSON.stringify(err));
-    });
-    /**
-     * se sube los datos al registro de todas las veterinarias
-     */
-    this.fireDba.object(`veterinarias/${llave}`).update(entidad)
-    .then((success:any)=>{
-      console.log('se subio con exito');
-    }).catch(err=>{
-      // se muestra si ocasiono algun problema
-      // la subida de datos
-      console.log(JSON.stringify(err));
-    });
-
+    return new Promise((resolve,reject)=>{
+      this.fireDba.object(`${llave}/`).update(entidad)
+      .then(()=>{
+        this.fireDba.object(`veterinarias/${llave}`).update(entidad).then(()=>{
+          resolve(true);
+        })
+      }).catch(()=>{
+        reject(false);
+      })
+    })
     
   }
   setTokenNotifications(token){
@@ -425,24 +472,21 @@ export class DbaService {
   /**
    * Actualiza los usurios e tipo mascota
    */
-  actualizar_user(user){
+  async actualizar_user(user){
 
     let llave = user.email
     llave = llave.replace("@","_");
     while(llave.indexOf(".") != -1){
       llave = llave.replace(".","_");
     }
-    this.fireDba.object(`${llave}/`).update(user)
-    .then(()=>{
-      console.log('se subio con exito');
-    }).catch(err=>{
-      // se muestra si ocasiono algun problema
-      // la subida de datos
-      console.log(JSON.stringify(err));
+    return new Promise((resolve,reject)=>{
+      this.fireDba.object(`${llave}/`).update(user).then(()=>{
+        resolve(true);
+      }).catch(()=>{
+        reject(false);
+      });
     });
-    /**
-     * se sube los datos al registro de todas las veterinarias
-     */
+    
     
   }
   

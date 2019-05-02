@@ -45,14 +45,6 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"GooglePlus\"><param name=\"android-package\" value=\"nl.xservices.plugins.GooglePlus\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<access origin=\"https://accounts.google.com/*\" />",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
               "count": 1
             },
@@ -159,14 +151,6 @@
           ],
           "/manifest": [
             {
-              "xml": "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.USE_CREDENTIALS\" />",
-              "count": 1
-            },
-            {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
               "count": 1
             }
@@ -231,10 +215,6 @@
     "cordova-plugin-fcm-with-dependecy-updated": {
       "PACKAGE_NAME": "com.devdactic.academytest"
     },
-    "cordova-plugin-googleplus": {
-      "PLAY_SERVICES_VERSION": "11.8.0",
-      "PACKAGE_NAME": "com.devdactic.academytest"
-    },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.devdactic.academytest"
     },
@@ -292,14 +272,6 @@
       "pluginId": "cordova-plugin-fcm-with-dependecy-updated",
       "clobbers": [
         "FCMPlugin"
-      ]
-    },
-    {
-      "id": "cordova-plugin-googleplus.GooglePlus",
-      "file": "plugins/cordova-plugin-googleplus/www/GooglePlus.js",
-      "pluginId": "cordova-plugin-googleplus",
-      "clobbers": [
-        "window.plugins.googleplus"
       ]
     },
     {
@@ -378,7 +350,6 @@
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-facebook4": "4.2.1",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
-    "cordova-plugin-googleplus": "7.0.1",
     "cordova-plugin-inappbrowser": "3.0.0",
     "cordova-plugin-ionic-keyboard": "2.1.3",
     "cordova-plugin-ionic-webview": "3.1.2",

@@ -28,7 +28,7 @@
         <ion-item *ngFor="let entidad of entidades | vet:filtrar">
 
             <ion-card>
-                <img [src]="entidad.url" />
+                <img *ngIf="entidad.url" [src]="entidad.url" />
                 <ion-card-header>
                     <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
                     <ion-card-title>{{entidad.name}}</ion-card-title>
@@ -50,10 +50,10 @@
 
 
 
-        <ion-item *ngFor="let entidad of mis_entidades | vet:filtrar">
+        <ion-item *ngFor="let entidad of user.veterinarias | vet:filtrar">
 
             <ion-card>
-                <img [src]="entidad.url" />
+                <img *ngIf="entidad.url" [src]="entidad.url" />
                 <ion-card-header>
                     <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
                     <ion-card-title>{{entidad.name}}</ion-card-title>

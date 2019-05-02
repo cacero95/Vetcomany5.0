@@ -47,6 +47,9 @@ export class MainPage implements OnInit {
       }
 
     }
+    else {
+      this.router.navigate(['/tabs/home']);
+    }
   }
 
   async face_shared(imagen:string){
