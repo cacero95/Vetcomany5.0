@@ -221,7 +221,7 @@ export class RegisterPage implements OnInit {
           else {
             console.log('se registro con exito');
             
-            this.router.navigate(['/central/main']);
+            this.router.navigate(['/main']);
             
           }
         }
@@ -255,7 +255,7 @@ export class RegisterPage implements OnInit {
         }
         else {
           console.log('se registro con exito')
-          this.router.navigate(['/central/main']);
+          this.router.navigate(['/main']);
           this.load = false;
         }
                                 

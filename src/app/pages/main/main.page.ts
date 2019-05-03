@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DbaService } from 'src/app/services/dba.service';
 import { User, Veterinaria } from 'src/app/models/usuarios';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, Events } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SocialService } from '../../services/social.service';
 import { TwitterSharedPage } from './twitter-shared/twitter-shared.page';
@@ -32,11 +32,23 @@ export class MainPage implements OnInit {
     private alertCtrl:AlertController,
     private router:Router,
     private sharing:SocialService,
-    private modalCtrl:ModalController) { }
+    private modalCtrl:ModalController,
+    private event:Events) { }
 
   ngOnInit() {
+    
     let usuario = this.dba.getUsuario();
-    console.log(usuario);
+    
+    this.event.subscribe('usuario',(user)=>{
+      usuario = user;
+      if(usuario.type == 'institute'){
+        this.vet = usuario;
+      }
+      else {
+        this.user = usuario;
+      }
+      this.fix_notifications(usuario);
+    })  
     if (usuario){
 
       if(usuario.type == 'institute'){
@@ -45,13 +57,17 @@ export class MainPage implements OnInit {
       else {
         this.user = usuario;
       }
-
+      this.fix_notifications(usuario);
     }
     else {
       this.router.navigate(['/tabs/home']);
     }
   }
-
+  async fix_notifications(usuario){
+    if(usuario.tasks){
+      this.dba.setNotifications(usuario.tasks);
+    }
+  }
   async face_shared(imagen:string){
     console.log(imagen);
     
@@ -195,7 +211,7 @@ export class MainPage implements OnInit {
 
   }
   ubicar (locate){
-    this.router.navigate([`/central/${locate}`]);
+    this.router.navigate([`/${locate}`]);
   }
   async add(){
     let alert = await this.alertCtrl.create({

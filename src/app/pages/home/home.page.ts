@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 
 import { DbaService } from 'src/app/services/dba.service';
+import { Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -15,16 +16,15 @@ export class HomePage implements OnInit {
   
   constructor(private router:Router,
     private storage:Storage,
-    private dba:DbaService) {
+    private dba:DbaService,
+    private event:Events) {
       this.user = dba.getUsuario();
-      console.log(this.user);
+      
       this.storage.get('usuarios').then(values=>{
         this.usuarios = values;
         
       });
-      
-      
-      
+
       if(this.usuarios){
         this.user = this.usuarios[0];
       }
@@ -35,6 +35,16 @@ export class HomePage implements OnInit {
       if(this.user){
         this.router.navigate(['/main']);
       }
+      
+      this.event.subscribe('usuario',(usuario)=>{
+        
+        this.user = usuario;
+        if(this.user){
+          this.router.navigate(['/main']);
+        } 
+      })
+      
+      
       
 
     }

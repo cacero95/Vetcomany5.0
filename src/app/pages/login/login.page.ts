@@ -65,7 +65,7 @@ export class LoginPage implements OnInit {
           console.log(data_user);
           if (data_user.name){
             this.load = false;
-            this.router.navigate(['/central/main']);
+            this.router.navigate(['/main']);
             
           }
           else {

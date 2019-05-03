@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DbaService } from '../../../services/dba.service';
 import { Veterinaria, User } from '../../../models/usuarios';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, Events } from '@ionic/angular';
 import { ShowVeterinariaPage } from './show-veterinaria/show-veterinaria.page';
 
 @Component({
@@ -16,7 +16,10 @@ export class VeterinariasPage implements OnInit {
   filtrar:string = '';
   user:User;
   opcion = 'Todas';
-  constructor(private dba:DbaService,private modalCtrl:ModalController, private alertCtrl:AlertController) {
+  constructor(private dba:DbaService,
+    private modalCtrl:ModalController,
+     private alertCtrl:AlertController,
+     private event:Events) {
     
   }
 
@@ -27,7 +30,9 @@ export class VeterinariasPage implements OnInit {
      * veternaria registrada
      */
     this.user = this.dba.getUsuario();
-    
+    this.event.subscribe('usuario',(usuario)=>{
+      this.user = usuario;
+    })
     if (!this.user.veterinarias){
       this.user.veterinarias = [];
       let alert = await this.alertCtrl.create({

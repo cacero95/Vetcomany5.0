@@ -7,11 +7,27 @@
                 </ion-toolbar>
             </ion-header>
             <ion-content>
-                <ion-list>
+                <ion-list *ngIf="decision == 'sin'">
                     <ion-menu-toggle style="--background:#ffffff;" auto-hidden="false" *ngFor="let item of appMenu">
                         <ion-item [routerDirection]="'root'" (click)="navegar(item.url)">
                             <ion-icon [name]="item.icon"></ion-icon>
                             <ion-title>{{item.title}}</ion-title>
+                        </ion-item>
+                    </ion-menu-toggle>
+                </ion-list>
+                <ion-list *ngIf="decision == 'user'">
+                    <ion-menu-toggle style="--background:#ffffff;" auto-hidden="false" *ngFor="let items of menuUser">
+                        <ion-item [routerDirection]="'root'" [routerLink]="items.url">
+                            <ion-icon [name]="items.icon"></ion-icon>
+                            <ion-title>{{items.title}}</ion-title>
+                        </ion-item>
+                    </ion-menu-toggle>
+                </ion-list>
+                <ion-list *ngIf="decision == 'vet'">
+                    <ion-menu-toggle style="--background:#ffffff;" auto-hidden="false" *ngFor="let items of menuVet">
+                        <ion-item [routerDirection]="'root'" [routerLink]="items.url">
+                            <ion-icon [name]="items.icon"></ion-icon>
+                            <ion-title>{{items.title}}</ion-title>
                         </ion-item>
                     </ion-menu-toggle>
                 </ion-list>

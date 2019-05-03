@@ -7,10 +7,32 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
   { path: 'grupos', loadChildren: './pages/grupos/grupos.module#GruposPageModule' },
-  
   { path: 'pet-info', loadChildren: './pages/pet-info/pet-info.module#PetInfoPageModule' },
   { path: 'mascota', loadChildren: './pages/mascota/mascota.module#MascotaPageModule' },
-  { path: 'central', loadChildren: './pages/central/central.module#CentralPageModule' },
+  {
+    path:'main', 
+    loadChildren: './pages/main/main.module#MainPageModule'
+  },
+  {
+    path:'calendar',
+    loadChildren:'./pages/vet_services/calendar/calendar.module#CalendarPageModule'
+  },
+  {
+    path:'user', // se puede ver toda la información de la cuenta
+    loadChildren: './pages/user/user.module#UserPageModule'
+  },
+  {
+    path:'users', // muestra los usuarios que tiene la veterinaria
+    loadChildren:'./pages/vet_services/users/users.module#UsersPageModule'
+  },
+  {
+    path:'veterinarias',
+    loadChildren: './pages/user_services/veterinarias/veterinarias.module#VeterinariasPageModule'
+  },
+  {
+    path:'notificaciones',
+    loadChildren: './pages/user_services/notificaciones/notificaciones.module#NotificacionesPageModule'
+  }
   
 ];
 

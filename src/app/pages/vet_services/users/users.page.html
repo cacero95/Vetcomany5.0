@@ -6,35 +6,34 @@
         <ion-title horizontal="center">Usuarios</ion-title>
     </ion-toolbar>
     <ion-toolbar>
-        <ion-searchbar (ionChange)="buscar_usuarios($event)"></ion-searchbar>
+        <ion-searchbar (ionChange)="buscar_usuarios($event)" placeholder="Buscar..."></ion-searchbar>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-list>
-        <ion-item *ngFor="let usuario of vet.users | vetUsers:busqueda; let x = index;">
-            <ion-card>
-                <img *ngIf="usuario.mascotas[x].url" [src]="usuario.mascotas[x].url" [alt]="usuario.name">
-                <ion-card-header>
-                    <ion-card-title> {{usuario.mascotas[x].pet_name}} </ion-card-title>
-                    <ion-card-subtitle> {{usuario.name}} {{usuario.apellido}} </ion-card-subtitle>
-                    <small> Dirección:{{usuario.direccion}} </small>
-                </ion-card-header>
-                <ion-card-content>
-                    <p> Raza:{{usuario.mascotas[x].raza}} </p>
-                    <p> Edad:{{usuario.mascotas[x].edad}} </p>
-                    <ion-row>
-                        <ion-col text-right>
-                            <ion-button (click)="llamar(usuario.telefono)" text-right size="small" fill="clear" color="primary">
-                                {{usuario.telefono}}
-                                <ion-icon slot="end" name="call"></ion-icon>
+<ion-content padding class="card-background-page">
+    <ion-slides pager="true">
+        <ion-slide *ngFor="let usuario of vet.users">
+            <ion-card class="texto" *ngFor="let pet of usuario.mascotas">
+                <img *ngIf="pet.url" [src]="pet.url">
+                <ion-card-content text-center>
+                    <ion-card-title class="texto">{{pet.pet_name}}</ion-card-title>
+                    <h2 color="primary">Padre:{{usuario.name}}-{{usuario.apellido}}
 
+                    </h2>
+                    <h3 color="primary">Raza:<small>{{pet.raza}}</small></h3>
+                    <ion-row>
+                        <ion-col size="10" offset="1">
+                            <ion-button (click)="add_event(usuario,pet)" style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" size="large">
+                                <ion-icon name="add"></ion-icon>
                             </ion-button>
                         </ion-col>
+
                     </ion-row>
+
 
                 </ion-card-content>
             </ion-card>
-        </ion-item>
-    </ion-list>
+
+        </ion-slide>
+    </ion-slides>
 </ion-content>

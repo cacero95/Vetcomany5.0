@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DbaService } from '../../services/dba.service';
 import { User, Veterinaria } from '../../models/usuarios';
 import { Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, Events } from '@ionic/angular';
 import { EditarPage } from './editar/editar.page';
 
 @Component({
@@ -16,10 +16,22 @@ export class UserPage implements OnInit {
   constructor(private dba:DbaService,
     private router:Router,
     private alertCtlr:AlertController,
-    private modalCtrl:ModalController) { }
+    private modalCtrl:ModalController,
+    private event:Events) { }
 
   ngOnInit() {
     let usuario = this.dba.getUsuario();
+    this.event.subscribe('usuario',(user)=>{
+      usuario = user;
+      if(usuario == 'mascota'){
+        this.user = usuario;
+      }
+      else {
+        this.vet = usuario;
+      }
+    })
+
+
     if(usuario == 'mascota'){
       this.user = usuario;
     }
@@ -29,9 +41,9 @@ export class UserPage implements OnInit {
   }
   close_sesion(){
 
-    this.dba.setUsuario(null);
     this.dba.setTipo('');
-    
+    this.dba.setUsuario(null);
+    this.router.navigate(['/tabs/home']);
   }
   async editar(){
     let modal = await this.modalCtrl.create({

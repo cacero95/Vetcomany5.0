@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { CalendarComponent } from 'ionic2-calendar/calendar';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Events } from '@ionic/angular';
 import { DbaService } from '../../../services/dba.service';
 import { formatDate } from '@angular/common';
 import { Tareas, Veterinaria, User } from '../../../models/usuarios';
@@ -37,8 +37,9 @@ export class CalendarPage implements OnInit {
   @ViewChild(CalendarComponent) myCal: CalendarComponent;
  
   constructor(private alertCtrl: AlertController,
-     @Inject(LOCALE_ID) private locale: string,
-     private dba:DbaService) {
+     @Inject(LOCALE_ID) private locale: string, private eventos:Events,
+     private dba:DbaService,
+     ) {
     console.log(locale);
     console.log(this.locale);
     //this.calendar.locale = this.locale;
@@ -47,6 +48,23 @@ export class CalendarPage implements OnInit {
   ngOnInit() {
     
     let usuario = this.dba.getUsuario();
+    this.eventos.subscribe('usuario',(user)=>{
+      usuario = user;
+      if (usuario.tasks){
+      
+        for(let task of usuario.tasks){
+          this.update_tasks(task);
+        }
+      }
+      if(usuario.type == 'mascota'){
+        this.user = usuario;
+      }
+      if(usuario.type == 'institute') {
+        this.vet = usuario;
+      }
+  
+      this.resetEvent();
+    })
     if (usuario.tasks){
       
       for(let task of usuario.tasks){
@@ -56,7 +74,7 @@ export class CalendarPage implements OnInit {
     if(usuario.type == 'mascota'){
       this.user = usuario;
     }
-    else {
+    if(usuario.type == 'institute') {
       this.vet = usuario;
     }
 

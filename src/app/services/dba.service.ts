@@ -6,7 +6,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable,pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
-import { Events } from '@ionic/angular';
+import { Events, AlertController } from '@ionic/angular';
 
 
 @Injectable({
@@ -24,7 +24,8 @@ export class DbaService {
   constructor(private http:HttpClient,
     private fireDba:AngularFireDatabase,
     private storage:Storage,
-    private events:Events) { }
+    private events:Events,
+    private alertCtrl:AlertController) { }
   
   login(email){
     let usuario_log = {};
@@ -303,9 +304,14 @@ export class DbaService {
   }
   setUsuario(usuario){
     this.usuario = usuario;
+    
+    this.publicar_usuario();
   }
   getUsuario(){
     return this.usuario;
+  }
+  publicar_usuario(){
+    this.events.publish('usuario',this.usuario);
   }
   setTipo(tipo){
     this.tipo = tipo;
@@ -366,6 +372,15 @@ export class DbaService {
     this.fireDba.object(`${this.key}`).update(this.usuario);
     
   }
+  async show_notification(dia:string,tarea:Tareas){
+    let alert = await this.alertCtrl.create({
+      header:dia,
+      subHeader:tarea.title,
+      message:tarea.description,
+      buttons:['confirmar']
+    });
+    alert.present();
+  }
   async setNotifications(tasks:Tareas[]){
     
     let fecha = new Date();
@@ -383,7 +398,13 @@ export class DbaService {
       if (yesterday.getDate() == fecha.getDate() || dia.getDate() == fecha.getDate()){
         let respuesta = await this.sendNotification(tarea);
         if (respuesta){
-          // acaba el el codigo cuando se recive la notificacion
+          this.show_notification('Mañana dia para',tarea);
+        }
+      }
+      if (dia.getDate() == fecha.getDate()){
+        let respuesta = await this.sendNotification(tarea);
+        if (respuesta){
+          this.show_notification('hoy dia para',tarea);
         }
       }
       if (fecha.getDate() == tomorrow.getDate()){

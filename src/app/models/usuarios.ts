@@ -13,10 +13,10 @@ export interface User{
 }
 export interface Tareas{
     origen:any;
-    title:string;
-    description:string;
+    title?:string;
+    description?:string;
     startTime:Date;
-    endTime:Date;
+    endTime?:Date;
     allDay?:boolean;
     destino:string;
 }

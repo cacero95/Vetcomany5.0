@@ -1,0 +1,28 @@
+.fondo {
+    --background: #20A9B2;
+    background-attachment: fixed;
+}
+
+ion-slides {
+    --bullet-background: grey;
+    --bullet-background-active: #8890B2;
+}
+
+ion-row {
+    align-items: center;
+}
+
+ion-item {
+    display: block;
+}
+
+.texto {
+    --color: #ffffff;
+    text-shadow: 5px 5px 5px #000000;
+    margin-bottom: 50px;
+}
+
+.card-background-page {
+    --background: url('../../../../assets/img/fondo_mar.jpg');
+    --color: #ffffff;
+}

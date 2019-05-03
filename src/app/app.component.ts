@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform, ModalController } from '@ionic/angular';
+import { Platform, ModalController, Events } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { TypeUserPage } from './pages/type-user/type-user.page';
 import { DbaService } from './services/dba.service';
 import { FCM, NotificationData } from '@ionic-native/fcm/ngx';
 import { Notifications } from './models/notifications';
+import { User, Veterinaria } from './models/usuarios';
 
 @Component({
   selector: 'app-root',
@@ -15,15 +16,31 @@ import { Notifications } from './models/notifications';
 })
 export class AppComponent {
   
-  
-
-  public appMenu = [
+  user:User;
+  vet:Veterinaria;
+  confirmar:boolean = true;
+  decision:string = 'sin';
+  appMenu = [
     
     {title: 'Entrar', url: '/login', icon: 'md-contact'},
     {title: 'Registrarse', url:'/register', icon:'md-arrow-round-up'},
     {title: 'Enterate', url: '/pet-info', icon: 'information-circle-outline'},
     {title: 'Grupos', url:'/grupos', icon:'chatbubbles'}
   
+  ];
+  menuUser = [
+    {title: 'Enterate', url: '/pet-info', icon: 'information-circle-outline'},
+    {title: 'Grupos', url:'/grupos', icon:'chatbubbles'},
+    {title: 'calendario', url:'/calendar', icon:'calendar'},
+    {title: 'entidades mascota',url:'/veterinarias',icon:'people'},
+    {title: 'cuenta', url:'/user',icon:'md-contact'} 
+  ];
+  menuVet = [
+    {title: 'Grupos', url: '/grupos',icon:'chatbubbles'},
+    {title: 'Enterate', url:'/pet-info', icon:'help'},
+    {title: 'calendario', url:'/calendar', icon:'calendar'},
+    {title: 'usuarios',url:'/users',icon:'people'},
+    {title: 'cuenta', url:'/user',icon:'md-contact'}
   ]
   constructor(
     private platform: Platform,
@@ -32,16 +49,19 @@ export class AppComponent {
     private router:Router,
     private modalCtrl:ModalController,
     private dba:DbaService,
-    private fcm:FCM
+    private fcm:FCM,
+    private event:Events
   ) {
+
     this.initializeApp();
+    
   }
 
   
 
-
+  
   async navegar(url){
-    console.log(url);
+    
     switch (url){
       case '/login':
         this.router.navigate(['/login']);
@@ -78,6 +98,31 @@ export class AppComponent {
        * notification
        */
       
+      this.event.subscribe('usuario',(usuario)=>{
+        
+        if(usuario){
+          
+          if(usuario.type == 'mascota'){
+            console.log('actualizando..');
+            this.confirmar = false;
+            this.user = usuario;
+            
+          console.log(this.appMenu);
+          this.decision = 'user';
+          }
+          if(usuario.type == 'institute') {
+    
+            this.vet = usuario;
+            this.decision = 'vet';
+            
+          }
+        }
+        else {
+          
+          this.decision = 'sin';
+        }
+        console.log(this.decision);
+      });
       
       this.fcm.getToken() // clave que se le designa a todo token
       .then((token:string)=>{
