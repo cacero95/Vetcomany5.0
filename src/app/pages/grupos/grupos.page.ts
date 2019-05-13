@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TwitterListData } from 'src/app/models/twitter_data';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Events } from '@ionic/angular';
 import { TwitterGroupPage } from './twitter-group/twitter-group.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-grupos',
@@ -26,14 +27,29 @@ export class GruposPage implements OnInit {
   tweets:TwitterListData[] = [];
   team_busqueda:string;
   load:boolean = false;
+  usuario:any;
   
   constructor(private http:HttpClient,
-    private modalCtrl:ModalController) {
-    
-    
-      
+    private modalCtrl:ModalController,
+    private event:Events,
+    private router:Router) {
+      this.event.subscribe('usuario',(usuario)=>{
+        this.usuario = usuario;
+      });
+      this.event.subscribe('close_session',(vacio)=>{
+        this.usuario = vacio;
+        console.log(this.usuario);
+      })
   }
 
+  back(){
+    if (this.usuario){
+      this.router.navigate(['/main']);
+    }
+    else {
+      this.router.navigate(['/tabs/home']);
+    }
+  }
   async ngOnInit() {
     
     this.busqueda = {

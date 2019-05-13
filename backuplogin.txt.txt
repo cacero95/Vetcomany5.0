@@ -1,0 +1,76 @@
+login(email){
+    let usuario_log = {};
+    this.key = email;
+        this.key = this.key.replace("@","_");
+        while(this.key.indexOf(".") != -1){
+          this.key = this.key.replace(".","_");
+        }
+    
+    this.actualiza = this.fireDba.list(`${this.key}`).snapshotChanges()
+    .pipe(map(valores=>{
+      return valores.map(value=>{
+
+        const data = value.payload.val();
+        const key = value.payload.key;
+        
+        return {key,data};
+      });
+    }));
+
+    this.actualiza.subscribe(data_user=>{
+
+      let user:any = {};
+      // console.log(data_user);
+      /**
+       * Se recorre el arreglo desde la llave con su data
+       */
+      for (let us of data_user){ 
+        switch(us.key){
+          case 'apellido':
+            user.apellido = us.data;
+          break;
+          case 'email':
+            user.email = us.data;
+          break;
+          case 'mascotas':
+            user.mascotas = us.data;
+          break;
+          case 'nMascotas':
+            user.nMascotas = us.data;
+          break;
+          case 'name':
+            user.name = us.data;
+          break;
+          case 'type':
+            user.type = us.data;
+          break;
+          case 'telefono':
+            user.telefono = us.data;
+          break;
+          case 'services':
+            user.services = us.data;
+          break;
+          case 'direccion':
+            user.direccion = us.data;
+          break;
+          case 'url':
+            user.url = us.data;
+          break;
+          case 'users':
+            user.users = us.data;
+          break;
+          case 'tasks':
+            user.tasks = us.data;
+            this.tasks = us.data;// se agregan las tareas de cada usuario
+          break;
+          case 'veterinarias':
+            user.veterinarias = us.data;
+        }
+      }
+      this.setUsuario(user);
+      usuario_log = user;
+      
+      // verifico que el usuario se loggeo
+    })
+    return usuario_log;
+  }

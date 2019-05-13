@@ -18,7 +18,7 @@ export interface Tareas{
     startTime:Date;
     endTime?:Date;
     allDay?:boolean;
-    destino:string;
+    destino?:string;
 }
 export interface Mascota{
     pet_name?:string;

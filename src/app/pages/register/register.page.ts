@@ -66,7 +66,9 @@ export class RegisterPage implements OnInit {
     ]
 
   }
-
+  back(){
+    this.router.navigate(['/tabs/home']);
+  }
   ngOnInit() {
   }
   /**

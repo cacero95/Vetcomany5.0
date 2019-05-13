@@ -3,6 +3,7 @@ export interface Postear_tweet{
     imagen?:string;
     hashtag?:string;
     mensaje?:string;
+    direccion?:string;
 }
 
 export interface Body {
@@ -33,6 +34,7 @@ export interface Status {
     text:                      string;
     truncated:                 boolean;
     entities:                  StatusEntities;
+    extended_entities:         Media[];
     metadata:                  Metadata;
     source:                    string;
     in_reply_to_status_id:     null;
@@ -54,7 +56,17 @@ export interface Status {
     lang:                      string;
     retweeted_status?:         RetweetedStatus;
 }
+export interface Media{
+    
+    display_url: string;
+    expanded_url: string;
+    id: number;
+    media_url: string;
+    media_url_https: string;
+    url:string;
+    type:string;
 
+}
 export interface StatusEntities {
     hashtags:      any[];
     symbols:       any[];

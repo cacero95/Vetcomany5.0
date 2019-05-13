@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import { SocialService } from '../../../services/social.service';
 
 @Component({
   selector: 'app-twitter-shared',
@@ -14,7 +15,8 @@ export class TwitterSharedPage implements OnInit {
   is_image:boolean = false;
 
   constructor(private modalCtrl:ModalController,
-    private imagePicker:ImagePicker) { }
+    private imagePicker:ImagePicker,
+    private social:SocialService) { }
 
   ngOnInit() {
   }
@@ -28,16 +30,24 @@ export class TwitterSharedPage implements OnInit {
       for (var i = 0; i < results.length; i++){
         this.imagePreview = 'data:image/jpeg;base64,' + results[i];
         this.image64 = results[i];
-        console.log(this.image64.length);
+        
         this.is_image = true; // quiere decir que la imagen esta en la mascota
       }
     },(err)=>console.log(JSON.stringify(err)))
   }
-  comentar(mensaje){
-    this.modalCtrl.dismiss({
-      imagen:this.image64,
-      mensaje
-    })
+  async comentar(mensaje){
+    if (this.image64){
+      let url = await this.social.upload_file(this.image64);
+      console.log(url);
+      if (url){
+
+        this.modalCtrl.dismiss({
+          imagen:url,
+          mensaje
+        })
+
+      }
+    }
   }
   close(){
     this.modalCtrl.dismiss({

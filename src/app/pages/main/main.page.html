@@ -70,17 +70,22 @@
         <img *ngIf="pet.url" [src]="pet.url">
         <ion-card-content text-center>
             <ion-card-title class="texto">{{pet.pet_name}}</ion-card-title>
-            <h2 color="primary">Padre:<small>{{user.name}}-{{user.apellido}}
-                </small>
+            <h2 color="primary">
+                Padre:{{user.name}} {{user.apellido}}
             </h2>
             <h3 color="primary">Raza:<small>{{pet.raza}}</small></h3>
-            <ion-row>
+            <ion-row *ngIf="pet.url">
+                <ion-col text-right>
+
+                    <ion-button style="margin-bottom: 20px;" fill="outline" (click)="twitter_shared(user.name,pet.url)">
+                        <ion-icon name="logo-twitter" slot="icon-only"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+            <ion-row style="margin-bottom: 20px;">
                 <ion-col text-right>
                     <ion-button (click)="face_shared(pet.url)">
                         <ion-icon name="logo-facebook" slot="icon-only"></ion-icon>
-                    </ion-button>
-                    <ion-button fill="outline" (click)="twitter_shared(user.name,pet.url)">
-                        <ion-icon name="logo-twitter" slot="icon-only"></ion-icon>
                     </ion-button>
                 </ion-col>
 
@@ -91,7 +96,7 @@
     </ion-card>
 
     <ion-fab color="danger" vertical="bottom" horizontal="center" slot="fixed">
-        <ion-fab-button (click)="comenta(user.name)">
+        <ion-fab-button (click)="comenta(user.email)">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>

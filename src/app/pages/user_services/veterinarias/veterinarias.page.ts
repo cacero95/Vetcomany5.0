@@ -3,6 +3,7 @@ import { DbaService } from '../../../services/dba.service';
 import { Veterinaria, User } from '../../../models/usuarios';
 import { ModalController, AlertController, Events } from '@ionic/angular';
 import { ShowVeterinariaPage } from './show-veterinaria/show-veterinaria.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-veterinarias',
@@ -19,10 +20,13 @@ export class VeterinariasPage implements OnInit {
   constructor(private dba:DbaService,
     private modalCtrl:ModalController,
      private alertCtrl:AlertController,
-     private event:Events) {
+     private event:Events,
+     private router:Router) {
     
   }
-
+  back(){
+    this.router.navigate(['/main']);
+  }
   async ngOnInit() {
 
     /**
@@ -33,16 +37,7 @@ export class VeterinariasPage implements OnInit {
     this.event.subscribe('usuario',(usuario)=>{
       this.user = usuario;
     })
-    if (!this.user.veterinarias){
-      this.user.veterinarias = [];
-      let alert = await this.alertCtrl.create({
-        header: 'Al registrarte',
-        subHeader: 'En una entidad reciviras',
-        message: 'Notificaciones de eventos, y recordatorios',
-        buttons:['Confirmar']
-      })
-      alert.present();
-    }
+    console.log(this.user);
 
     
     this.dba.getVeterinarias().subscribe(async(vet)=>{
@@ -54,7 +49,7 @@ export class VeterinariasPage implements OnInit {
         let entity:Veterinaria = entidad.data; 
         this.entidades.push(entity);
         if (entity.users){
-          
+          console.log(entity);
           let find = await entity.users.find((element)=>{
             return element.email === this.user.email;
           });
@@ -94,12 +89,26 @@ export class VeterinariasPage implements OnInit {
     this.filtrar = info.target.value;
     
   }
+  async show_firstMensaje(){
+    let alert = await this.alertCtrl.create({
+      header: 'Al registrarte',
+      subHeader: 'En una entidad reciviras',
+      message: 'Notificaciones de eventos, y recordatorios',
+      buttons:['Confirmar']
+    });
+    alert.present();
+  }
   async registrarse(entidad:Veterinaria){
         
     let find = await this.user.veterinarias.find((element:Veterinaria)=>{
       return element.name === entidad.name;
     });
     if(!find){
+
+      if (!this.user.veterinarias){
+        this.show_firstMensaje();
+      }
+
       let usuario:User = {
         name:this.user.name,
         type:this.user.type,
@@ -133,9 +142,12 @@ export class VeterinariasPage implements OnInit {
    * permite ver la informacion de la veterinaria registrada 
    */
   async ver(entidad:Veterinaria){
-    this.dba.setEntidad(entidad);
+    console.log(entidad);
     let modal = await this.modalCtrl.create({
-      component:ShowVeterinariaPage
+      component:ShowVeterinariaPage,
+      componentProps:{
+        entidad
+      }
     });
     modal.present();
   }

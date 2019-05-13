@@ -4,6 +4,7 @@ import { User, Veterinaria } from '../../models/usuarios';
 import { Router } from '@angular/router';
 import { AlertController, ModalController, Events } from '@ionic/angular';
 import { EditarPage } from './editar/editar.page';
+import { EditarVetPage } from './editar-vet/editar-vet.page';
 
 @Component({
   selector: 'app-user',
@@ -19,11 +20,16 @@ export class UserPage implements OnInit {
     private modalCtrl:ModalController,
     private event:Events) { }
 
+
+  back(){
+    this.router.navigate(['/main']);
+  }
+
   ngOnInit() {
     let usuario = this.dba.getUsuario();
     this.event.subscribe('usuario',(user)=>{
       usuario = user;
-      if(usuario == 'mascota'){
+      if(usuario.type == 'mascota'){
         this.user = usuario;
       }
       else {
@@ -32,7 +38,7 @@ export class UserPage implements OnInit {
     })
 
 
-    if(usuario == 'mascota'){
+    if(usuario.type == 'mascota'){
       this.user = usuario;
     }
     else {
@@ -46,9 +52,42 @@ export class UserPage implements OnInit {
     this.router.navigate(['/tabs/home']);
   }
   async editar(){
+    
     let modal = await this.modalCtrl.create({
-      component:EditarPage
+      component:EditarPage,
+      componentProps: {
+        'usuario':this.user
+      }
     });
     modal.present();
+    const { data } = await modal.onDidDismiss();
+    
+    
+    if(data.result){
+      this.show_mess('Usuario','Actualizado');
+    }
+  }
+  async editar_vet(){
+    let modal = await this.modalCtrl.create({
+      component: EditarVetPage,
+      componentProps: {
+        'usuario':this.vet
+      }
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    // si retorna true quiere decir que la veterinaria esta actualizada
+    
+    if(data.result){
+      this.show_mess('Usuario','Actualizado');
+    }
+  }
+  async show_mess(title:string,mensaje:string){
+    let alert = await this.alertCtlr.create({
+      header:title,
+      subHeader:mensaje,
+      buttons:['Confirmar']
+    });
+    alert.present();
   }
 }

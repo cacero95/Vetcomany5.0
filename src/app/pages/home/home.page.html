@@ -12,7 +12,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="card-background-page">
+<ion-content *ngIf="tweets.length == 0" padding class="card-background-page">
 
     <ion-card>
 
@@ -51,3 +51,24 @@
     <img src="http://editarfotosonline.net/wp-content/uploads/2013/08/La-creaci%C3%B3n-de-retratos-de-mascotas-mediante-el-arte-de-Collage.jpg" alt="">
 
 -->
+<ion-content *ngIf="tweets.length > 0" padding class="card-background">
+
+    <h2 text-center> Enterate </h2>
+    <ion-card class="texto" *ngFor="let post of tweets">
+        <img *ngIf="post.imagen" padding style="border-radius: 50px;" [src]="post.imagen" alt="">
+
+        <ion-card-content text-center>
+            <ion-card-title class="texto">{{post.origen}}</ion-card-title>
+
+            <p> {{post.mensaje}} </p>
+
+
+            <ion-button *ngIf="post.direccion" (click)="explorar('completo',post.direccion)" style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" size="large">
+                Ver
+            </ion-button>
+
+        </ion-card-content>
+    </ion-card>
+
+
+</ion-content>

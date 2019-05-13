@@ -33,6 +33,7 @@ export class AppComponent {
     {title: 'Grupos', url:'/grupos', icon:'chatbubbles'},
     {title: 'calendario', url:'/calendar', icon:'calendar'},
     {title: 'entidades mascota',url:'/veterinarias',icon:'people'},
+    {title: 'notificaciones', url:'/notificaciones', icon:'people'},
     {title: 'cuenta', url:'/user',icon:'md-contact'} 
   ];
   menuVet = [
@@ -40,6 +41,7 @@ export class AppComponent {
     {title: 'Enterate', url:'/pet-info', icon:'help'},
     {title: 'calendario', url:'/calendar', icon:'calendar'},
     {title: 'usuarios',url:'/users',icon:'people'},
+    {title: 'notificaciones', url:'/notificaciones', icon:'people'},
     {title: 'cuenta', url:'/user',icon:'md-contact'}
   ]
   constructor(
@@ -84,6 +86,9 @@ export class AppComponent {
       case '/pet-info':
           this.router.navigate(['/pet-info']);
           break;
+      case '/notificaciones':
+        this.router.navigate(['/notificaciones']);
+        break;
     }
     
    
@@ -121,8 +126,11 @@ export class AppComponent {
           
           this.decision = 'sin';
         }
-        console.log(this.decision);
+        
       });
+      this.event.subscribe('close_session',()=>{
+        this.decision = 'sin';
+      })
       
       this.fcm.getToken() // clave que se le designa a todo token
       .then((token:string)=>{

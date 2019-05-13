@@ -27,80 +27,26 @@ export class DbaService {
     private events:Events,
     private alertCtrl:AlertController) { }
   
-  login(email){
-    let usuario_log = {};
+
+  loggear(email){
+    this.key = email;
     this.key = email;
         this.key = this.key.replace("@","_");
         while(this.key.indexOf(".") != -1){
           this.key = this.key.replace(".","_");
         }
-    
-    this.actualiza = this.fireDba.list(`${this.key}`).snapshotChanges()
+    this.actualiza = this.fireDba.list(`${this.key}/`).snapshotChanges()
     .pipe(map(valores=>{
       return valores.map(value=>{
-
-        const data = value.payload.val();
-        const key = value.payload.key;
-        
-        return {key,data};
+        let key = value.key;
+        let data = new Object();
+        data[key] = value.payload.val();
+        return data;
       });
     }));
-
-    this.actualiza.subscribe(data_user=>{
-
-      let user:any = {};
-      // console.log(data_user);
-      /**
-       * Se recorre el arreglo desde la llave con su data
-       */
-      for (let us of data_user){ 
-        switch(us.key){
-          case 'apellido':
-            user.apellido = us.data;
-          break;
-          case 'email':
-            user.email = us.data;
-          break;
-          case 'mascotas':
-            user.mascotas = us.data;
-          break;
-          case 'nMascotas':
-            user.nMascotas = us.data;
-          break;
-          case 'name':
-            user.name = us.data;
-          break;
-          case 'type':
-            user.type = us.data;
-          break;
-          case 'telefono':
-            user.telefono = us.data;
-          break;
-          case 'services':
-            user.services = us.data;
-          break;
-          case 'direccion':
-            user.direccion = us.data;
-          break;
-          case 'url':
-            user.url = us.data;
-          break;
-          case 'users':
-            user.users = us.data;
-          break;
-          case 'tasks':
-            user.tasks = us.data;
-            this.tasks = us.data;// se agregan las tareas de cada usuario
-          break;
-        }
-      }
-      this.setUsuario(user);
-      usuario_log = user;
-      
-      // verifico que el usuario se loggeo
-    })
-    return usuario_log;
+    return this.actualiza;
   }
+  
 
   async registrar_vet(vet:Veterinaria){
     
@@ -303,16 +249,28 @@ export class DbaService {
     return this.entidad_user;
   }
   setUsuario(usuario){
-    this.usuario = usuario;
-    
-    this.publicar_usuario();
+
+    return new Promise ((resolve,reject)=>{
+      this.usuario = usuario;
+      
+      if(usuario){
+        this.events.publish('usuario',usuario);
+        this.tasks = this.usuario.tasks;
+        console.log('inicio de sesion');
+        resolve(true);
+      }
+      else {
+        this.events.publish('close_session',null);
+        console.log('cerrar session');
+        resolve(false);
+      }
+
+    })
   }
   getUsuario(){
     return this.usuario;
   }
-  publicar_usuario(){
-    this.events.publish('usuario',this.usuario);
-  }
+  
   setTipo(tipo){
     this.tipo = tipo;
   }
@@ -381,47 +339,32 @@ export class DbaService {
     });
     alert.present();
   }
-  async setNotifications(tasks:Tareas[]){
-    
-    let fecha = new Date();
+  async setNotifications(tasks:Tareas[], fecha){
+    // let respuesta = await this.sendNotification(tarea);
+    let ayer = new Date(fecha.getTime() - 24*60*60*1000);
+    console.log(fecha.getDate());    
     let pos =  0;
     for (let tarea of tasks){
+      let evento = new Date(tarea.startTime);
+      let yesterday = new Date(evento.getTime() - 24*60*60*1000);
+      let tomorrow = new Date(evento.getTime() + 24*60*60*1000);
+      console.log(evento.getDate());
+      console.log(ayer.getDate());
+      console.log(yesterday.getDate());
+      console.log(tomorrow);
 
-      let dia = new Date(tarea.startTime);
-      let yesterday = new Date(dia.getTime() - 24*60*60*1000);
-      let tomorrow = new Date(dia.getTime() + 24*60*60*1000);
-      /**
-       *  si la fecha es un dia antes del evento o el mismo dia
-       *  se manda una notificacion segun el token
-      */
-     
-      if (yesterday.getDate() == fecha.getDate() || dia.getDate() == fecha.getDate()){
+      if(ayer.getDate() == yesterday.getDate()){
         let respuesta = await this.sendNotification(tarea);
-        if (respuesta){
-          this.show_notification('Mañana dia para',tarea);
+        if(respuesta){
+          this.show_notification('Hoy es dia', tarea);
         }
       }
-      if (dia.getDate() == fecha.getDate()){
-        let respuesta = await this.sendNotification(tarea);
-        if (respuesta){
-          this.show_notification('hoy dia para',tarea);
+      else if(yesterday.getDay() == fecha.getDay()){
+        let response = await this.sendNotification(tarea);
+        if(response){
+          this.show_notification('Mañana es dia', tarea);
         }
       }
-      if (fecha.getDate() == tomorrow.getDate()){
-        /**
-         * eliminamos la notificación splice
-         */
-        tasks.splice(pos); // borro la notificacion que ya paso
-        this.usuario.tasks = tasks;
-        
-        if (this.usuario.type == 'mascota'){
-          this.actualizar_user(this.usuario);
-        }
-        else {
-          this.actualizar_vet(this.usuario);
-        }
-      }
-      pos = pos+1;
     }
     
   }
@@ -434,7 +377,7 @@ export class DbaService {
       origen:this.usuario.name
     }
    return new Promise ((resolve,reject)=>{
-     this.http.post(`https://vetcompany.herokuapp.com/notificaciones`,cuerpo).subscribe((data)=>{
+     this.http.post(`https://gag-6f2a5.firebaseapp.com/notificaciones`,cuerpo).subscribe((data)=>{
        resolve(true);
      },err=>{
        reject(false);
@@ -485,9 +428,11 @@ export class DbaService {
   }
   notifications(noti:Tareas){
     
-    this.http.post(`https://vetcompany.herokuapp.com/notificaciones`,noti)
+    this.http.post(`https://gag-6f2a5.firebaseapp.com/notificaciones`,noti)
     .subscribe(respuesta=>{
       console.log(JSON.stringify(respuesta));
+    },err=>{
+      console.log(err);
     })
   }
   /**

@@ -1,7 +1,9 @@
 <ion-header>
     <ion-toolbar color="tertiary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-button (click)="back()" slot="icon-only">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-title>Veterinarias</ion-title>
     </ion-toolbar>
@@ -19,7 +21,7 @@
         </ion-segment>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content padding>
 
     <ion-list *ngIf="opcion == 'Todas'">
 

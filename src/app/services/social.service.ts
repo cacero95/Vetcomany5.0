@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Postear_tweet } from '../models/twitter_tweets';
+import { Postear_tweet,Body } from '../models/twitter_tweets';
+import * as firebase from 'firebase';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocialService {
 
-  constructor(private http:HttpClient) { }
+
+  actualiza:Observable<any[]>;
+  constructor(private http:HttpClient,
+    private firedba:AngularFireDatabase) { }
 
   /**
    * origen: quien va tuitear
@@ -28,5 +36,70 @@ export class SocialService {
     return this.http.post(`https://vetcompany.herokuapp.com/twitter_post`,body)
 
   }
-  
+  upload_file(imagen){
+    return new Promise((resolve,reject)=>{
+
+      let fireStorage = firebase.storage().ref();
+         let file_name = new Date().valueOf().toString();
+         fireStorage.child(`img/${file_name}`)
+         let upload_task:firebase.storage.UploadTask =
+         fireStorage.child(`img/${file_name}`)
+         .putString(imagen,'base64',{contentType: 'image/jpeg'});
+         upload_task.on(firebase.storage.TaskEvent.STATE_CHANGED,
+          ()=>{
+            
+          },
+          (err)=>{
+            console.log(JSON.stringify(err));
+            reject(false);
+          },()=>{
+            // success
+            fireStorage.child(`img/${file_name}`).getDownloadURL().then((url)=>{
+              resolve(url);
+            })
+          })
+    })
+  }
+  publicar_noticia(cuerpo:Postear_tweet){
+    let key = new Date().toISOString();
+        key = key.replace("@","_");
+        while(key.indexOf(".") != -1){
+          key = key.replace(".","_");
+        }
+    return new Promise((resolve,reject)=>{
+      this.firedba.object(`publicaciones/${key}/`).update(cuerpo).then(()=>{
+        this.twitter_sharing(cuerpo).subscribe((data)=>{
+          console.log(data);
+          resolve(true);
+        })
+      }).catch((err)=>{
+        reject(false);
+      })
+    })
+      
+  }
+  get_tweets(){
+    let busqueda = {
+      type:'tweets',
+      tema:'cacero95'
+    }
+    return new Promise((resolve,reject)=>{
+      this.http.post(`https://vetcompany.herokuapp.com/twitter`,busqueda)
+      .subscribe((data:Body)=>{
+        resolve(data.cuerpo);
+      },err=>{
+        reject(null);
+      })
+    })
+  }
+  getPublicaciones(){
+    this.actualiza = this.firedba.list(`publicaciones`).snapshotChanges()
+    .pipe(map(posts=>{
+      return posts.map(value=>{
+        let data = value.payload.val();
+        return data;
+      });
+    }));
+    return this.actualiza;
+  }
 }

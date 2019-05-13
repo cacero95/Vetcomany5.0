@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Veterinaria, Tareas, Mascota,User } from '../../../models/usuarios';
 import { DbaService } from '../../../services/dba.service';
 import { Events, AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 
 
@@ -16,7 +17,12 @@ export class UsersPage implements OnInit {
   tasks = {} as Tareas;
   constructor(private dba:DbaService,
     private event:Events,
-    private alertCtrl:AlertController) { }
+    private alertCtrl:AlertController,
+    private router:Router) { }
+  
+  back(){
+    this.router.navigate(['/main']);
+  }
 
   ngOnInit() {
     this.vet = this.dba.getUsuario();
@@ -33,7 +39,7 @@ export class UsersPage implements OnInit {
   }
   async add_event(usuario:User,mascota:Mascota){
     let date = new Date();
-    console.log(JSON.stringify(date));
+    
     let tarea:Tareas;
     let alert = await this.alertCtrl.create({
       header:'Ingresar evento',
@@ -57,7 +63,7 @@ export class UsersPage implements OnInit {
           text:'Mañana',
           role:'tomorrow',
           handler:(values)=>{
-            console.log(JSON.stringify(values));
+            
             let tomorrow = new Date(date.getTime()+24*60*60*1000);
             tarea = {
               
@@ -111,7 +117,7 @@ export class UsersPage implements OnInit {
           text:'Semanal',
           role:'7 dias',
           handler:(values)=>{
-            console.log(JSON.stringify(values));
+            
             let next_week = new Date(date.getTime()+(24*60*60*1000)*7);
             tarea = {
               

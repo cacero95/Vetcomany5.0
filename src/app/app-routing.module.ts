@@ -32,7 +32,8 @@ const routes: Routes = [
   {
     path:'notificaciones',
     loadChildren: './pages/user_services/notificaciones/notificaciones.module#NotificacionesPageModule'
-  }
+  },
+  
   
 ];
 

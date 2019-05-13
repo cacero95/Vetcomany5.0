@@ -34,6 +34,7 @@ import localeCOExtra from '@angular/common/locales/extra/es-CO';
 import { registerLocaleData } from '@angular/common';
 import { TwitterSharedPage } from './pages/main/twitter-shared/twitter-shared.page';
 import { EditarPage } from './pages/user/editar/editar.page';
+import { EditarVetPage } from './pages/user/editar-vet/editar-vet.page';
 
 // firebase credentials
 
@@ -56,7 +57,8 @@ registerLocaleData(localeCO,'es',localeCOExtra);
     ShowVeterinariaPage,
     MascotaPage,
     TwitterSharedPage,
-    EditarPage
+    EditarPage,
+    EditarVetPage
   ],
   entryComponents: [
     TypeUserPage,
@@ -65,7 +67,8 @@ registerLocaleData(localeCO,'es',localeCOExtra);
     ShowVeterinariaPage,
     MascotaPage,
     TwitterSharedPage,
-    EditarPage
+    EditarPage,
+    EditarVetPage
   ],
   imports: [BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig),

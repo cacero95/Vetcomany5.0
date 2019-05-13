@@ -1,30 +1,59 @@
 <ion-header>
-    <ion-toolbar color="tertiary">
+    <ion-toolbar class="fondo" color="tertiary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-button slot="icon-only" (click)="back()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-title horizontal="center">Mensajes</ion-title>
     </ion-toolbar>
+    <ion-toolbar>
+        <ion-tabs>
+
+            <ion-tab-bar slot="top">
+                <ion-tab-button [ngClass]="{border: change_clases}" (click)="change_views('publicaciones')">
+                    <ion-icon name="chatbubbles"></ion-icon>
+                    <ion-label>Publicaciones</ion-label>
+                </ion-tab-button>
+                <ion-tab-button [ngClass]="{border: !change_clases}" (click)="change_views('mensajes')">
+                    <ion-icon name="notifications"></ion-icon>
+                    <ion-label>Notificaciones</ion-label>
+                </ion-tab-button>
+
+
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="user">
-    <ion-list *ngIf="user.tasks">
-        <ion-item *ngFor="let tareas of user.tasks">
+<ion-content *ngIf="opcion == 'mensajes'" class="card-background-page" padding>
+    <ion-card class="texto" *ngFor="let task of notificaciones">
 
-            <ion-card horizontal="center">
-                <ion-card-header text-center>
-                    <ion-card-subtitle> {{tareas.startTime}} </ion-card-subtitle>
-                    <ion-card-title text-center>{{tareas.title}}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                    <p> Para el: {{tareas.startTime}} </p>
+        <ion-card-content text-center>
 
-                    <p> {{tareas.description}} </p>
+            <ion-card-title *ngIf="task.origen" class="texto">{{task.origen}}</ion-card-title>
+            <ion-card-title *ngIf="!task.origen" class="texto">{{task.title}}</ion-card-title>
+            <h2 *ngIf="!task.origen" color="primary">
+                {{task.title}}
+            </h2>
+            <h3 color="primary"> {{task.startTime}} </h3>
+            <p> {{task.description}} </p>
 
 
-                </ion-card-content>
-            </ion-card>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
 
-        </ion-item>
-    </ion-list>
+<ion-content class="card-background-page" *ngIf="opcion == 'publicaciones'" padding>
+    <ion-card class="texto" *ngFor="let task of tareas">
+        <img *ngIf="task.imagen" [src]="task.imagen">
+        <ion-card-content text-center>
+
+            <ion-card-title class="texto"> {{task.origen}} </ion-card-title>
+            <h2 color="primary">
+                {{task.mensaje}}
+            </h2>
+
+        </ion-card-content>
+    </ion-card>
 </ion-content>

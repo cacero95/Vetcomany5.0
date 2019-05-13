@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, NavParams } from '@ionic/angular';
 import { DbaService } from '../../../../services/dba.service';
-import { Veterinaria } from '../../../../models/usuarios';
+import { Veterinaria, Tareas, User } from '../../../../models/usuarios';
 
 @Component({
   selector: 'app-show-veterinaria',
@@ -11,14 +11,18 @@ import { Veterinaria } from '../../../../models/usuarios';
 export class ShowVeterinariaPage implements OnInit {
   is_transporte:boolean;
   entidad:Veterinaria;
+  user:User;
+  
   constructor(private modalCtrl:ModalController,
     private dba:DbaService,
-    private alertCtrl:AlertController) {
-
+    private alertCtrl:AlertController,
+    private params:NavParams) {
+      
     }
 
   ngOnInit() {
-    this.entidad = this.dba.getEntidad_user();
+    this.user = this.dba.getUsuario();
+    this.entidad = this.params.get('entidad')
     console.log(this.entidad);
     for(let servicio of this.entidad.services){
       if (servicio == 'Transporte mascotas'){
@@ -33,40 +37,110 @@ export class ShowVeterinariaPage implements OnInit {
 
   }
   async add_event(){
+    let date = new Date();
+    let tick:boolean = true;
+    let tarea:Tareas;
     let alert = await this.alertCtrl.create({
-      header:'Cada cuanto',
-      message:'Se repetira el <strong>evento</strong>!!!',
+      header:'Que dia',
+      message:'es el evento <strong>evento</strong>?',
+      mode:'ios',
+      inputs:[
+        {
+          name:'title',
+          placeholder:'Titulo',
+          type:'text'
+        },
+        {
+          name:'descripcion',
+          placeholder:'Descripción',
+          type:'text'
+        }
+      ],
       buttons:[
         {
-          text:'Cada mes',
+          text:'Proximo mes',
           role:'mes',
-          handler:()=>{
-            
+          handler:(values)=>{
+            let aumento = (24*60*60*1000)*7;
+            aumento = aumento * 4;
+            let mes = new Date(date.getTime()+aumento)
+            tarea = {
+              
+              startTime:mes,
+              title:values.title,
+              description:values.descripcion,
+              origen:this.entidad.name,
+              
+              
+            }
           }
         },
         {
-          text:'Cada 15 dias',
+          text:'En 15 días',
           role:'quince',
-          handler:()=>{
+          handler:(values)=>{
+            let aumento = (24*60*60*1000)*7;
+            aumento = aumento * 2;
+            let fifteen = new Date(date.getTime()+aumento);
+            tarea = {
 
+              startTime:fifteen,
+              title:values.title,
+              description:values.descripcion,
+              origen:this.entidad.name
+              
+              
+            }
           }
         },
         {
-          text:'Otro',
-          role:'otro',
-          handler:()=>{
-
+          text:'Proxima semana',
+          role:'7 dias',
+          handler:(values)=>{
+            let next_week = new Date(date.getTime()+(24*60*60*1000)*7);
+            tarea = {
+              
+              startTime:next_week,
+              title:values.title,
+              description:values.descripcion,
+              origen:this.entidad.name,
+              
+              
+            }
           }
         },
         {
-          text:'Nunca',
-          role:'Nunca',
+          text:'Mañana',
+          role:'Mañana',
+          handler:(values)=>{
+            let tomorrow = new Date(date.getTime()+24*60*60*1000);
+            tarea = {
+              
+              startTime:tomorrow,
+              title:values.title,
+              description:values.descripcion,
+              origen:this.entidad.name,
+              
+              
+            }
+          }
+        },
+        {
+          text:'Cancelar',
+          role:'Cancelar',
           handler:()=>{
-
+            tick = false;
+            alert.dismiss();
           }
         }
       ]
     });
     alert.present();
+    alert.onDidDismiss().then(()=>{
+      if(tick){
+
+        this.dba.setEvent(tarea);
+      }
+    })
   }
 }

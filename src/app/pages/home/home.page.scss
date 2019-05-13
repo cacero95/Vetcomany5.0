@@ -27,3 +27,19 @@
         color: #fff;
     }
 }
+
+.fondo_tweet {
+    --background: #20A9B2;
+    background-attachment: fixed;
+    --color: #ffffff;
+}
+
+.card-background {
+    --background: url('../../../assets/img/fondo_mar.jpg');
+    --color: #ffffff;
+}
+
+.texto {
+    --color: #ffffff;
+    text-shadow: 5px 5px 5px #000000;
+}

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DbaService } from '../../../services/dba.service';
-import { User, Veterinaria } from '../../../models/usuarios';
 import { Events } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { SocialService } from '../../../services/social.service';
+import { Postear_tweet } from '../../../models/twitter_tweets';
+import { Tareas } from '../../../models/usuarios';
 
 @Component({
   selector: 'app-notificaciones',
@@ -9,27 +12,41 @@ import { Events } from '@ionic/angular';
   styleUrls: ['./notificaciones.page.scss'],
 })
 export class NotificacionesPage implements OnInit {
-  user:User;
-  vet:Veterinaria;
-  constructor(private dba:DbaService,private event:Events) { }
+  usuario:any;
+  tareas:Postear_tweet[] = [];
+  notificaciones:Tareas[] = [];
+  opcion:string = 'publicaciones';
+  change_clases:boolean = true;
+  constructor(private dba:DbaService,
+    private event:Events,
+    private router:Router,
+    private sharing:SocialService) { }
 
+  back(){
+    this.router.navigate(['/main']);
+  }
   ngOnInit() {
-    let usuario = this.dba.getUsuario();
+    this.usuario = this.dba.getUsuario();
+    if (this.usuario.tasks){
+      this.notificaciones = this.usuario.tasks;
+    }
     this.event.subscribe('usuario',(user)=>{
-      usuario = user;
-      if (usuario.type == 'mascota'){
-        this.user = usuario;
+      this.usuario = user;
+      if (this.usuario.tasks){
+        this.notificaciones = this.usuario.tasks;
       }
-      else {
-        this.vet = usuario;
-      }
+    });
+    
+    this.sharing.getPublicaciones().subscribe((posts)=>{
+      this.tareas = posts;
     })
-    if (usuario.type == 'mascota'){
-      this.user = usuario;
-    }
-    else {
-      this.vet = usuario;
-    }
+
+    
+  }
+
+  change_views(option){
+    this.opcion = option;
+    this.change_clases = !this.change_clases;
   }
 
 }

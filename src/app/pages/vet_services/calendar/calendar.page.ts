@@ -4,6 +4,7 @@ import { AlertController, Events } from '@ionic/angular';
 import { DbaService } from '../../../services/dba.service';
 import { formatDate } from '@angular/common';
 import { Tareas, Veterinaria, User } from '../../../models/usuarios';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.page.html',
@@ -39,19 +40,22 @@ export class CalendarPage implements OnInit {
   constructor(private alertCtrl: AlertController,
      @Inject(LOCALE_ID) private locale: string, private eventos:Events,
      private dba:DbaService,
+     private router:Router
      ) {
     console.log(locale);
     console.log(this.locale);
     //this.calendar.locale = this.locale;
   }
- 
+  volver(){
+    this.router.navigate(['/main']);
+  }
   ngOnInit() {
     
     let usuario = this.dba.getUsuario();
     this.eventos.subscribe('usuario',(user)=>{
       usuario = user;
       if (usuario.tasks){
-      
+        console.log(usuario.tasks);
         for(let task of usuario.tasks){
           this.update_tasks(task);
         }

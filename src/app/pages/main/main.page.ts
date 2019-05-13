@@ -39,16 +39,6 @@ export class MainPage implements OnInit {
     
     let usuario = this.dba.getUsuario();
     
-    this.event.subscribe('usuario',(user)=>{
-      usuario = user;
-      if(usuario.type == 'institute'){
-        this.vet = usuario;
-      }
-      else {
-        this.user = usuario;
-      }
-      this.fix_notifications(usuario);
-    })  
     if (usuario){
 
       if(usuario.type == 'institute'){
@@ -62,10 +52,24 @@ export class MainPage implements OnInit {
     else {
       this.router.navigate(['/tabs/home']);
     }
+
+    
+    this.event.subscribe('usuario',(user)=>{
+      usuario = user;
+      if(usuario.type == 'institute'){
+        this.vet = usuario;
+      }
+      else {
+        this.user = usuario;
+      }
+      this.fix_notifications(usuario);
+    })  
+    
   }
   async fix_notifications(usuario){
     if(usuario.tasks){
-      this.dba.setNotifications(usuario.tasks);
+      let fecha = new Date();
+      this.dba.setNotifications(usuario.tasks,fecha);
     }
   }
   async face_shared(imagen:string){
@@ -86,7 +90,7 @@ export class MainPage implements OnInit {
 
   }
 
-  async twitter_shared(origen,imagen:string){
+  async twitter_shared(origen,imagen?:string){
     
     let cuerpo = {} as Postear_tweet;
     let alert = await this.alertCtrl.create({
@@ -100,21 +104,6 @@ export class MainPage implements OnInit {
         }
       ],
       buttons:[
-        {
-          text:'Confirmar',
-          role:'ok',
-          handler:(data)=>{
-            console.log(data);
-            
-            cuerpo = {
-              origen,
-              imagen,
-              mensaje:data.mensaje
-            }
-            
-            alert.dismiss();
-          }
-        },
         {
           text:'Cancelar',
           role:'cancelar',
@@ -130,18 +119,45 @@ export class MainPage implements OnInit {
             }
             alert.dismiss();
           }
+        },
+        {
+          text:'Confirmar',
+          role:'ok',
+          handler:(data)=>{
+            console.log(data);
+            
+            cuerpo = {
+              origen,
+              imagen,
+              mensaje:data.mensaje
+            }
+            
+            alert.dismiss();
+          }
         }
       ]
     })
-    alert.present();
-    alert.onDidDismiss().then(()=>{
-      this.sharing.twitter_sharing(cuerpo).subscribe(()=>{
+    /**
+     * this.sharing.twitter_sharing(cuerpo).subscribe(()=>{
         this.alert_message('Exito :)', 'Al postear');
       },err=>{
         this.alert_message('Error :(', 'Al tuitear');
         console.log(JSON.stringify(err));
       })
-    })
+     */
+    alert.present();
+    alert.onDidDismiss().then(async()=>{
+      
+        let posting = await this.sharing.publicar_noticia(cuerpo)
+        if(posting){
+          this.alert_message('Exito :)', 'Al postear');
+        }
+        else {
+          this.alert_message('Error :(', 'Al postear');
+        }
+      
+      
+    });
     
     //console.log(imagen);
     //this.sharing.twitter_sharing(origen,imagen,mensaje).subscribe((data)=>{
@@ -170,17 +186,7 @@ export class MainPage implements OnInit {
     await alert.present();
   }
   
-  async whats_shared(imagen:string){
-    console.log(imagen);
-    this.social.shareViaWhatsApp('publicando desde ionic',imagen,this.url);
-    this.social.shareViaWhatsApp('Esta es mi mascota',imagen,this.url)
-    .then((data)=>{
-      console.log(data);
-    }).catch(err=>{
-      console.log(err);
-    })
-
-  }
+  
   
   async comenta(origen){
     let modal = await this.modalCtrl.create({
@@ -193,14 +199,17 @@ export class MainPage implements OnInit {
       imagen:data.imagen,
       mensaje:data.mensaje 
     }
+    
     if(!data.result){
-      this.sharing.twitter_sharing(cuerpo)
-      .subscribe(data=>{
+      let postear = await this.sharing.publicar_noticia(cuerpo);
+      console.log('y la respuesta al postear');
+      console.log(postear);
+      if (postear){
         this.alert_message('Exito :)','Al publicar');
-      },err=>{
-        this.alert_message('Error :(', 'Al publicar');
-        console.log(JSON.stringify(err));
-      })
+      }
+      else {
+        this.alert_message('Error :(','Al publicar');
+      }
     }
     else {
       // quiere decir que se cancelo share 

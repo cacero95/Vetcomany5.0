@@ -1,7 +1,9 @@
 <ion-header>
     <ion-toolbar color="tertiary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-button (click)="back()" slot="icon-only">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-title>Ingresar</ion-title>
     </ion-toolbar>
@@ -25,7 +27,7 @@
         </ion-item>
         <br>
         <br>
-        <ion-button color="medium" expand="block" (click)="login()">
+        <ion-button color="medium" expand="block" (click)="usuario_login()">
             entrar
         </ion-button>
 

@@ -1,20 +1,22 @@
 <ion-header>
     <ion-toolbar color="tertiary">
-        <ion-buttons>
-            <ion-button (click)="cerrar()">cerrar</ion-button>
+        <ion-buttons slot="start">
+            <ion-button (click)="cerrar()" slot="icon-only">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-title>{{entidad.name}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
     <ion-card>
         <img [src]="entidad.url" />
         <ion-card-header>
             <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
             <ion-card-title>{{entidad.name}}</ion-card-title>
         </ion-card-header>
-        <ion-card-content>
+        <ion-card-content style="margin-bottom: 40px;">
             <p>Numero contacto {{entidad.telefono}} </p>
             <p>Maneja servicios como:</p>
             <ul>

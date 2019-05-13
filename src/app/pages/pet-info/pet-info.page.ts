@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DbaService } from 'src/app/services/dba.service';
 
-import { ModalController } from '@ionic/angular';
+import { ModalController, Events } from '@ionic/angular';
 import { FullViewPage } from './full-view/full-view.page';
 
 import { PetInfo,PetData } from '../../models/pets_data';
@@ -21,9 +21,26 @@ export class PetInfoPage implements OnInit {
   pet_information:PetData[] = []; // este arreglo es el que se va mostrar en el html
   load:boolean = false;
   selection:string;
-  constructor(private router:Router,
-    private dba:DbaService, private modalCtrl:ModalController) {}
-    
+  usuario:any;
+  constructor(private router:Router, private event:Events,
+    private dba:DbaService, private modalCtrl:ModalController) {
+        this.event.subscribe('usuario',(usuario)=>{
+          this.usuario = usuario;
+        });
+        this.event.subscribe('close_session',(vacio)=>{
+          this.usuario = vacio;
+        })
+    }
+
+back(){
+  if(this.usuario){
+    this.router.navigate(['/main']);
+  }
+  else {
+    this.router.navigate(['/tabs/home']);
+  }
+}
+
 ngOnInit() {
   
   this.load = true;

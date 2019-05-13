@@ -1,7 +1,9 @@
 <ion-header>
     <ion-toolbar color="tertiary">
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-button (click)="back()" slot="icon-only">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-title horizontal="center">Usuarios</ion-title>
     </ion-toolbar>
