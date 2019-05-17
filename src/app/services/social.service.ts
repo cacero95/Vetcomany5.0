@@ -60,6 +60,7 @@ export class SocialService {
           })
     })
   }
+ 
   publicar_noticia(cuerpo:Postear_tweet){
     let key = new Date().toISOString();
         key = key.replace("@","_");
@@ -77,6 +78,21 @@ export class SocialService {
       })
     })
       
+  }
+  getHashTags(tema){
+    let busqueda = {
+      type:'hashtag',
+      tema
+    }
+    console.log(busqueda);
+    return new Promise((resolve,reject)=>{
+      this.http.post(`https://vetcompany.herokuapp.com/twitter`,busqueda)
+      .subscribe((data)=>{
+        resolve(data);
+      },err=>{
+        reject(null);
+      })
+    })
   }
   get_tweets(){
     let busqueda = {

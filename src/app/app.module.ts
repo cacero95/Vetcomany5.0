@@ -35,6 +35,8 @@ import { registerLocaleData } from '@angular/common';
 import { TwitterSharedPage } from './pages/main/twitter-shared/twitter-shared.page';
 import { EditarPage } from './pages/user/editar/editar.page';
 import { EditarVetPage } from './pages/user/editar-vet/editar-vet.page';
+import { IonicRatingModule } from 'ionic4-rating';
+
 
 // firebase credentials
 
@@ -75,6 +77,7 @@ registerLocaleData(localeCO,'es',localeCOExtra);
     AngularFireDatabaseModule,
     HttpClientModule,
     AngularFireAuthModule,
+    IonicRatingModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AppRoutingModule],

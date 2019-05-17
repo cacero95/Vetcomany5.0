@@ -11,8 +11,8 @@ export interface Body {
 }
 
 export interface Cuerpo {
-    statuses:        Status[];
-    search_metadata: SearchMetadata;
+    statuses?:        Status[];
+    search_metadata?: SearchMetadata;
 }
 
 export interface SearchMetadata {
@@ -34,7 +34,7 @@ export interface Status {
     text:                      string;
     truncated:                 boolean;
     entities:                  StatusEntities;
-    extended_entities:         Media[];
+    extended_entities:         Extended_entities;
     metadata:                  Metadata;
     source:                    string;
     in_reply_to_status_id:     null;
@@ -56,8 +56,12 @@ export interface Status {
     lang:                      string;
     retweeted_status?:         RetweetedStatus;
 }
-export interface Media{
+export interface Extended_entities{
     
+    media:Media[];
+
+}
+export interface Media {
     display_url: string;
     expanded_url: string;
     id: number;
@@ -65,7 +69,6 @@ export interface Media{
     media_url_https: string;
     url:string;
     type:string;
-
 }
 export interface StatusEntities {
     hashtags:      any[];

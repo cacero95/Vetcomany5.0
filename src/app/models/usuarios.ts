@@ -38,6 +38,13 @@ export interface Veterinaria {
     services?:string[];
     type:string;
     tasks?:Tareas[];
-    
+    calificaciones?:Calificaciones[];
+    valoracion?:number;
 }
 
+export interface Calificaciones {
+    name:string;
+    usuario:string;
+    estrellas?:number;
+    comentario?:string;
+}

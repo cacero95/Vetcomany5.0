@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController, NavParams } from '@ionic/angular';
 import { DbaService } from '../../../../services/dba.service';
-import { Veterinaria, Tareas, User } from '../../../../models/usuarios';
+import { Veterinaria, Tareas, User, Calificaciones } from '../../../../models/usuarios';
+import { SocialService } from '../../../../services/social.service';
+import { Postear_tweet } from '../../../../models/twitter_tweets';
 
 @Component({
   selector: 'app-show-veterinaria',
@@ -11,9 +13,13 @@ import { Veterinaria, Tareas, User } from '../../../../models/usuarios';
 export class ShowVeterinariaPage implements OnInit {
   is_transporte:boolean;
   entidad:Veterinaria;
-  user:User;
+  usuario:User;
+  rate;
+  starts:number;
+  is_calificar:boolean = false;
   
   constructor(private modalCtrl:ModalController,
+    private social:SocialService,
     private dba:DbaService,
     private alertCtrl:AlertController,
     private params:NavParams) {
@@ -21,8 +27,9 @@ export class ShowVeterinariaPage implements OnInit {
     }
 
   ngOnInit() {
-    this.user = this.dba.getUsuario();
-    this.entidad = this.params.get('entidad')
+    
+    this.usuario = this.dba.getUsuario();
+    this.entidad = this.params.get('entidad');
     console.log(this.entidad);
     for(let servicio of this.entidad.services){
       if (servicio == 'Transporte mascotas'){
@@ -42,7 +49,7 @@ export class ShowVeterinariaPage implements OnInit {
     let tarea:Tareas;
     let alert = await this.alertCtrl.create({
       header:'Que dia',
-      message:'es el evento <strong>evento</strong>?',
+      message:'es el <strong>evento</strong>?',
       mode:'ios',
       inputs:[
         {
@@ -142,5 +149,44 @@ export class ShowVeterinariaPage implements OnInit {
         this.dba.setEvent(tarea);
       }
     })
+  }
+  async show_message(title:string,mensaje:string){
+    let alert = await this.alertCtrl.create({
+      header:title,
+      subHeader:mensaje,
+      buttons:['Confirmar']
+    });
+    alert.present();
+  }
+  async calificar(comentario){
+    
+    let calificacion:Calificaciones = {
+      name:this.usuario.name,
+      usuario:this.usuario.email,
+      comentario:comentario,
+      estrellas:this.starts
+    }
+    if(!this.entidad.calificaciones){
+      this.entidad.calificaciones = [];
+      this.entidad.calificaciones.push(calificacion);
+    }
+    else {
+      this.entidad.calificaciones.push(calificacion);
+    }
+    let respuesta = await this.dba.califica_entidad(this.entidad);
+    console.log(respuesta);
+    if(respuesta){
+      this.show_message('Gracias','Por comentar');
+    }
+    else {
+      this.show_message('Pedimos diculpas','Intentelo mas tarde');
+    }
+    this.is_calificar = false;
+  }
+  
+  onRateChange(event){
+
+    this.starts = event;
+    
   }
 }

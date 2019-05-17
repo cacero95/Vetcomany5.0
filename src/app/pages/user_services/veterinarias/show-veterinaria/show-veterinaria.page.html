@@ -9,14 +9,26 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding *ngIf="!is_calificar">
     <ion-card>
         <img [src]="entidad.url" />
         <ion-card-header>
+            <ion-row>
+                <ion-col size="10" offset="1">
+                    <ion-button style="--background:#20A9B2; --color:#ffffff;" shape="round" expand="full" (click)="is_calificar=true;">
+                        Calificar
+                    </ion-button>
+                    <ion-item>
+
+                    </ion-item>
+
+
+                </ion-col>
+            </ion-row>
             <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
             <ion-card-title>{{entidad.name}}</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="margin-bottom: 40px;">
+        <ion-card-content style="margin-bottom: 60px;">
             <p>Numero contacto {{entidad.telefono}} </p>
             <p>Maneja servicios como:</p>
             <ul>
@@ -43,3 +55,29 @@
         </ion-fab-button>
     </ion-fab>
 </ion-content>
+<ion-content *ngIf="is_calificar">
+    <ion-card>
+        <ion-card-header>
+            <rating [rate]="rate" readonly="false" size="default" (rateChange)="onRateChange($event)">
+            </rating>
+
+        </ion-card-header>
+        <ion-card-content>
+
+            <ion-item>
+                <ion-label position="floating">Que piensas</ion-label>
+                <ion-textarea #mensaje placeholder="Que tal los servicios de la institución"></ion-textarea>
+            </ion-item>
+            <ion-row>
+                <ion-col size="10" offset="1">
+
+                    <ion-button size="large" shape style="--background:#20A9B2; --background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" (click)="calificar(mensaje.value)">Comentar</ion-button>
+
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
+<ion-footer>
+
+</ion-footer>

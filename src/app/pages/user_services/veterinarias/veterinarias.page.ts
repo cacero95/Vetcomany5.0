@@ -5,6 +5,7 @@ import { ModalController, AlertController, Events } from '@ionic/angular';
 import { ShowVeterinariaPage } from './show-veterinaria/show-veterinaria.page';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-veterinarias',
   templateUrl: './veterinarias.page.html',
@@ -17,18 +18,23 @@ export class VeterinariasPage implements OnInit {
   filtrar:string = '';
   user:User;
   opcion = 'Todas';
+  rate;
   constructor(private dba:DbaService,
     private modalCtrl:ModalController,
      private alertCtrl:AlertController,
      private event:Events,
-     private router:Router) {
+     private router:Router,
+     ) {
     
+      
+
   }
   back(){
     this.router.navigate(['/main']);
   }
+  
   async ngOnInit() {
-
+    
     /**
      * Se manda un mensaje si el usuario no tiene ninguna 
      * veternaria registrada
@@ -37,7 +43,7 @@ export class VeterinariasPage implements OnInit {
     this.event.subscribe('usuario',(usuario)=>{
       this.user = usuario;
     })
-    console.log(this.user);
+    
 
     
     this.dba.getVeterinarias().subscribe(async(vet)=>{
@@ -47,9 +53,12 @@ export class VeterinariasPage implements OnInit {
          * estructura viene data:Veterinaria
          */
         let entity:Veterinaria = entidad.data; 
+        entity = await this.valoracion(entity);
+        
         this.entidades.push(entity);
+        
         if (entity.users){
-          console.log(entity);
+          
           let find = await entity.users.find((element)=>{
             return element.email === this.user.email;
           });
@@ -70,15 +79,31 @@ export class VeterinariasPage implements OnInit {
     });
     
   }
+  valoracion(entidad:Veterinaria){
+    if(!entidad.calificaciones){
+      entidad.valoracion = 0;
+      return entidad;
+    }
+    let sumatoria = 0;
+    for(let entity of entidad.calificaciones){
+      sumatoria = sumatoria + entity.estrellas;
+    }
+    let media = sumatoria / entidad.calificaciones.length;
+    entidad.valoracion = media;
+    return entidad;
+  }
   async actualiza_user(entity:Veterinaria){
     // agrego la veterinaria al usuario en cuestion
     delete entity.users;
     this.user.veterinarias.push(entity);
-    console.log(this.user.veterinarias);
+    
     let respuesta = await this.dba.actualizar_user(this.user);
     if(!respuesta){
       this.show_alert('Error :(','No se pudo registrar la entidad');
     }
+  }
+  onRateChange(event){
+
   }
   change(opcion){
     
@@ -126,7 +151,7 @@ export class VeterinariasPage implements OnInit {
         entidad.users = [];
         entidad.users.push(usuario);
       }
-      console.log(entidad.users);
+     
       let respuesta = await this.dba.actualizar_vet(entidad);
       if (!respuesta){
         this.show_alert('Error :(','No se pudo registrar la entidad');
@@ -142,7 +167,7 @@ export class VeterinariasPage implements OnInit {
    * permite ver la informacion de la veterinaria registrada 
    */
   async ver(entidad:Veterinaria){
-    console.log(entidad);
+    
     let modal = await this.modalCtrl.create({
       component:ShowVeterinariaPage,
       componentProps:{

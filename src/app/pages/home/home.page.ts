@@ -6,7 +6,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { DbaService } from 'src/app/services/dba.service';
 import { Events, AlertController } from '@ionic/angular';
 import { SocialService } from '../../services/social.service';
-import { Postear_tweet, Status } from '../../models/twitter_tweets';
+import { Postear_tweet, Status, Cuerpo } from '../../models/twitter_tweets';
 
 @Component({
   selector: 'app-home',
@@ -51,34 +51,27 @@ export class HomePage implements OnInit {
   }
   cargar_publicaciones(){
     this.social.getPublicaciones().subscribe(async(data)=>{
+      this.tweets = data;
+      this.getTweets();
+    })
+  }
+  async getTweets(){
+    let respuesta:Cuerpo = await this.social.get_tweets();
+    
+    if(respuesta.statuses){
       let contador = 0;
-      for(let post of data){
-        this.tweets.push(post);
-        if(post.imagen.length > 0){
-          console.log(post);
-          post = await this.cargar_tweets(post,contador);
-          console.log(post);
+      
+      for (let index = this.tweets.length-1; index>=0; index--){
+        
+        if (this.tweets[index].imagen){
+          
+          this.tweets[index].direccion = respuesta.statuses[contador].extended_entities.media[0].expanded_url;
         }
         contador = contador+1;
       }
-      
-    })
-  }
-  async cargar_tweets(publicacion:Postear_tweet,index:number){
-    
-    let sharing:any = await this.social.get_tweets();
-    console.log(sharing);
-    if(sharing){
-      
-      
-      let tweet:any = sharing.statuses[index].extended_entities;
-       
-      publicacion.direccion = tweet.media[0].expanded_url;
-        
     }
-    console.log(publicacion);
-    return publicacion;
   }
+  
   async show_message(title:string,mensaje:string){
     let alert = await this.alert.create({
       header:title,

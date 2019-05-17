@@ -33,7 +33,7 @@ export class AppComponent {
     {title: 'Grupos', url:'/grupos', icon:'chatbubbles'},
     {title: 'calendario', url:'/calendar', icon:'calendar'},
     {title: 'entidades mascota',url:'/veterinarias',icon:'people'},
-    {title: 'notificaciones', url:'/notificaciones', icon:'people'},
+    {title: 'notificaciones', url:'/notificaciones', icon:'chatboxes'},
     {title: 'cuenta', url:'/user',icon:'md-contact'} 
   ];
   menuVet = [
@@ -41,7 +41,7 @@ export class AppComponent {
     {title: 'Enterate', url:'/pet-info', icon:'help'},
     {title: 'calendario', url:'/calendar', icon:'calendar'},
     {title: 'usuarios',url:'/users',icon:'people'},
-    {title: 'notificaciones', url:'/notificaciones', icon:'people'},
+    {title: 'notificaciones', url:'/notificaciones', icon:'chatboxes'},
     {title: 'cuenta', url:'/user',icon:'md-contact'}
   ]
   constructor(

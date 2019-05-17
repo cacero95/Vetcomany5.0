@@ -47,7 +47,28 @@ export class DbaService {
     return this.actualiza;
   }
   
-
+  async califica_entidad(entidad:Veterinaria){
+    this.key = entidad.email;
+    
+        this.key = this.key.replace("@","_");
+        while(this.key.indexOf(".") != -1){
+          this.key = this.key.replace(".","_");
+        }
+    return new Promise((resolve,reject)=>{
+      this.fireDba.object(`${this.key}`).update(entidad).then(()=>{
+        this.fireDba.object(`veterinarias/${this.key}`).update(entidad)
+        .then(()=>{
+          resolve(true);
+        }).catch((error)=>{
+          console.log(error);
+          reject(false);
+        })
+      }).catch((err)=>{
+        console.log(err);
+        reject(false);
+      })
+    })
+  }
   async registrar_vet(vet:Veterinaria){
     
     this.key = vet.email

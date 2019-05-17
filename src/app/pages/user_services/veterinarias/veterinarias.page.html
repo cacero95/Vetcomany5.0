@@ -34,6 +34,8 @@
                 <ion-card-header>
                     <ion-card-subtitle>{{entidad.direccion}}</ion-card-subtitle>
                     <ion-card-title>{{entidad.name}}</ion-card-title>
+                    <rating [rate]="entidad.valoracion" readonly="false" size="default" (rateChange)="onRateChange($event)">
+                    </rating>
                 </ion-card-header>
                 <ion-card-content>
                     <ul>
